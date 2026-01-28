@@ -16,14 +16,18 @@ class VerifikasiSloResource extends Resource
     protected static ?string $model = ServiceRequest::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
-    protected static ?string $navigationLabel = 'Verifikasi SLO';
+    protected static ?string $navigationLabel = 'Verifikasi Data dan Dokumen SLO';
+    protected static ?string $modelLabel = 'Verifikasi Data dan Dokumen SLO';
     protected static ?int $navigationSort = 4;
 
     // Optional: Filter only records needing SLO verification
-    // public static function getEloquentQuery(): Builder
-    // {
-    //     return parent::getEloquentQuery()->where('status', 'waiting_slo_verification');
-    // }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereNotNull('submitted_at')
+            ->where('status', \App\Enums\PermohonanStatus::VERIFIKASI_SLO)
+            ->where('status_detail', \App\Enums\PermohonanDetailStatus::MENUNGGU_VERIFIKASI);
+    }
 
     public static function form(Form $form): Form
     {
@@ -38,12 +42,15 @@ class VerifikasiSloResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('no_registrasi'),
-                Tables\Columns\TextColumn::make('no_slo')->label('Nomor SLO'),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('nomor_permohonan')->searchable(),
+                Tables\Columns\TextColumn::make('applicant.nama_lengkap')->label('Pemohon')->searchable(),
+                Tables\Columns\TextColumn::make('jenis_layanan')->badge(),
+                Tables\Columns\TextColumn::make('submitted_at')->label('Diterima')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('status_detail')->label('Status Detail')->badge(),
             ])
+            ->defaultSort('submitted_at', 'asc')
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->label('Lihat detail permohonan'),
             ]);
     }
 
@@ -51,8 +58,7 @@ class VerifikasiSloResource extends Resource
     {
         return [
             'index' => Pages\ListVerifikasiSlos::route('/'),
-            'create' => Pages\CreateVerifikasiSlo::route('/create'),
-            'edit' => Pages\EditVerifikasiSlo::route('/{record}/edit'),
+            'view' => Pages\ViewVerifikasiSlo::route('/{record}'),
         ];
     }
 }
