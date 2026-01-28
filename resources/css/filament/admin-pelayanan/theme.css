@@ -98,3 +98,16 @@
     color: #e5e7eb !important;
 }
 
+/* sidebar label: allow wrap (2 lines), disable truncate */
+.fi-sidebar-item-label.truncate,
+.fi-sidebar-item-label {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    word-break: break-word !important;
+    line-height: 1.2 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important; /* clamp but not one-line truncate */
+}

@@ -72,20 +72,39 @@ class PermohonanLayananResource extends Resource
                 //
             ])
             ->actions([
-                // Custom action to open the workflow page (which is technically the Edit page)
-                Tables\Actions\Action::make('proses')
-                    ->label('Proses / Detail')
-                    ->icon('heroicon-o-arrow-right-circle')
-                    ->url(fn (ServiceRequest $record) => Pages\EditPermohonanLayanan::getUrl(['record' => $record])),
+                Tables\Actions\Action::make('verifikasiSekarang')
+                    ->label('Verifikasi sekarang')
+                    ->icon('heroicon-o-check-badge')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(function (ServiceRequest $record) {
+                        $record->transitionTo(
+                            \App\Enums\PermohonanStatus::VERIFIKASI_SLO,
+                            \App\Enums\PermohonanDetailStatus::MENUNGGU_VERIFIKASI
+                        );
+
+                        return redirect(
+                            \App\Filament\AdminPelayanan\Resources\VerifikasiSloResource::getUrl('view', ['record' => $record->getKey()])
+                        );
+                    })
+                    ->visible(fn (ServiceRequest $record) => 
+                        $record->submitted_at !== null 
+                        && $record->status === \App\Enums\PermohonanStatus::DITERIMA_PLN
+                    ),
             ]);
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereNotNull('submitted_at')
+            ->where('status', \App\Enums\PermohonanStatus::DITERIMA_PLN);
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListPermohonanLayanans::route('/'),
-            'create' => Pages\CreatePermohonanLayanan::route('/create'),
-            'edit' => Pages\EditPermohonanLayanan::route('/{record}/edit'),
         ];
     }
 }
