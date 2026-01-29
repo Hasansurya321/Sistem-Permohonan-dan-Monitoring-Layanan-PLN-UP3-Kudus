@@ -10,18 +10,24 @@ class ApplicantIdentity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nik',
-        'nama_lengkap',
-        'user_id',
-        'no_meter',
-        'id_pelanggan_12',
-        'default_provinsi',
-        'default_kab_kota',
-        'default_kecamatan',
-        'default_kelurahan',
-        'default_rt',
-        'default_rw',
-        'default_alamat_detail',
+    'user_id',
+    'nik',
+    'nama_lengkap',
+    'no_hp',
+    'no_kk',
+    'npwp',
+    'foto_bangunan',
+    'foto_ktp_selfie',
+    'id_pelanggan_12',
+    'no_meter',
+
+    'default_provinsi',
+    'default_kab_kota',
+    'default_kecamatan',
+    'default_kelurahan',
+    'default_rt',
+    'default_rw',
+    'default_alamat_detail',
     ];
 
     public function user()

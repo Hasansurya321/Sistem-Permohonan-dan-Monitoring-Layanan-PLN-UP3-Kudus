@@ -4,7 +4,7 @@
 :root{
   --pln-blue: #0B63CE;
   --pln-blue-dark: #094FA6;
-  --pln-bg: #F5F7FB;
+  --pln-bg: #eaf5f8; /* Updated to requested color */
   --pln-card-radius: 14px;
 
   /* kalau filament pakai var ini, kita paksa */
@@ -16,7 +16,7 @@
 .fi-layout,
 .fi-main,
 .fi-page {
-  background: var(--pln-bg) !important;
+  background-color: var(--pln-bg) !important;
 }
 
 /* topbar */
@@ -64,7 +64,7 @@
   background: rgba(255,255,255,.16) !important;
 }
 
-/* card look */
+/* card look - DEFAULT (overridden below for scope) */
 .fi-section,
 .fi-wi,
 .fi-ta,
@@ -98,16 +98,56 @@
     color: #e5e7eb !important;
 }
 
-/* sidebar label: allow wrap (2 lines), disable truncate */
-.fi-sidebar-item-label.truncate,
-.fi-sidebar-item-label {
+/* ========================================= */
+/* SCOPED OVERRIDES FOR ADMIN PELAYANAN      */
+/* ========================================= */
+
+/* KASUS 2: Background seragam #eaf5f8 (Layout Containers) */
+body.fi-panel-admin-pelayanan,
+body.fi-panel-admin-pelayanan .fi-body,
+body.fi-panel-admin-pelayanan .fi-main,
+body.fi-panel-admin-pelayanan .fi-page,
+body.fi-panel-admin-pelayanan .fi-section,
+body.fi-panel-admin-pelayanan .fi-card,
+body.fi-panel-admin-pelayanan .fi-ta-ctn,
+body.fi-panel-admin-pelayanan .fi-wi {
+    background-color: #eaf5f8 !important;
+}
+
+/* TUGAS A: FIX BACKGROUND PUTIH DI DALAM CARD/SECTION */
+body.fi-panel-admin-pelayanan .fi-section-content,
+body.fi-panel-admin-pelayanan .fi-card-content {
+    padding: 20px !important;
+    background-color: #eaf5f8 !important;
+    background: #eaf5f8 !important;
+}
+
+/* TUGAS B: FIX SIDEBAR LABEL MAX 2 BARIS (NO CUT) */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-label {
     white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
-    word-break: break-word !important;
-    line-height: 1.2 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
-    overflow: hidden !important; /* clamp but not one-line truncate */
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2;
+    line-height: 1.25 !important;
+    max-width: 100% !important;
+}
+
+/* Override truncate class specifically */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-label.truncate {
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Adjust parent alignment for multi-line labels */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-button {
+    align-items: flex-start !important;
+}
+
+/* Optional: Icon adjustment for top alignment */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-icon {
+    margin-top: 0.125rem !important;
 }
