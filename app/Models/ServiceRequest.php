@@ -115,4 +115,43 @@ class ServiceRequest extends Model
             $this->update($data);
         });
     }
+
+    /**
+     * SINKRONISASI DATA PEMOHON KE applicant_identities
+     * Hanya mengisi kolom yang masih kosong/blank (Tanpa Overwrite)
+     */
+    public function syncApplicantFromPayloadSafely(): void
+    {
+        $this->loadMissing('applicant');
+
+        if (!$this->applicant) {
+            return;
+        }
+
+        $payload = $this->payload_json ?? [];
+        $lokasi  = data_get($payload, 'lokasi', []);
+
+        if (!is_array($lokasi) || empty($lokasi)) {
+            return;
+        }
+
+        $mapping = [
+            'default_alamat_detail' => data_get($lokasi, 'alamat_detail'),
+            'default_rt'            => data_get($lokasi, 'rt'),
+            'default_rw'            => data_get($lokasi, 'rw'),
+            'default_kelurahan'     => data_get($lokasi, 'kelurahan'),
+            'default_kecamatan'     => data_get($lokasi, 'kecamatan'),
+            'default_kab_kota'      => data_get($lokasi, 'kab_kota'),
+            'default_provinsi'      => data_get($lokasi, 'provinsi'),
+        ];
+
+        foreach ($mapping as $column => $value) {
+            // TIDAK overwrite jika sudah ada nilai (menggunakan blank() & filled() helper)
+            if (blank($this->applicant->{$column}) && filled($value)) {
+                $this->applicant->{$column} = $value;
+            }
+        }
+
+        $this->applicant->save();
+    }
 }

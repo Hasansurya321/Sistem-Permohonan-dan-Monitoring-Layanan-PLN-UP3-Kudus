@@ -53,26 +53,33 @@ class ViewVerifikasiSlo extends ViewRecord
         ];
     }
 
-    private static function toSafeString(mixed $state): string
+    private static function stringify(mixed $v): string
     {
-        if ($state === null) return '-';
+        if ($v === null) return '-';
 
-        if ($state instanceof \BackedEnum) {
-            return method_exists($state, 'getLabel')
-                ? (string) $state->getLabel()
-                : (string) $state->value;
+        if ($v instanceof \BackedEnum) {
+            return method_exists($v, 'getLabel') ? (string) $v->getLabel() : (string) $v->value;
         }
 
-        if (is_array($state)) {
-            return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($v instanceof \Carbon\CarbonInterface) {
+            return $v->toDateTimeString();
         }
 
-        if (is_object($state)) {
-            if (method_exists($state, '__toString')) return (string) $state;
-            return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($v instanceof \Illuminate\Support\Collection) {
+            $v = $v->all();
         }
 
-        return (string) $state;
+        if (is_array($v)) {
+            return json_encode($v, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        if (is_object($v)) {
+            return method_exists($v, '__toString')
+                ? (string) $v
+                : json_encode($v, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        return (string) $v;
     }
 
     public function infolist(Infolist $infolist): Infolist
@@ -82,23 +89,22 @@ class ViewVerifikasiSlo extends ViewRecord
                 Infolists\Components\Section::make('Data Permohonan')
                     ->schema([
                         Infolists\Components\TextEntry::make('nomor_permohonan')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify($record->nomor_permohonan)),
 
                         Infolists\Components\TextEntry::make('jenis_layanan')
                             ->badge()
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify($record->jenis_layanan)),
 
                         Infolists\Components\TextEntry::make('status')
                             ->badge()
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify($record->status)),
 
                         Infolists\Components\TextEntry::make('status_detail')
                             ->badge()
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify($record->status_detail)),
 
                         Infolists\Components\TextEntry::make('submitted_at')
                             ->label('Tanggal Masuk')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state))
                             ->dateTime(),
                     ])->columns(3),
 
@@ -106,55 +112,55 @@ class ViewVerifikasiSlo extends ViewRecord
                     ->schema([
                         Infolists\Components\TextEntry::make('applicant.nama_lengkap')
                             ->label('Nama Lengkap')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.nama_lengkap'))),
 
                         Infolists\Components\TextEntry::make('applicant.nik')
                             ->label('NIK')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.nik'))),
 
                         Infolists\Components\TextEntry::make('applicant.no_meter')
                             ->label('No Meter')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.no_meter'))),
 
                         Infolists\Components\TextEntry::make('applicant.id_pelanggan_12')
                             ->label('ID Pelanggan 12')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.id_pelanggan_12'))),
 
                         Infolists\Components\TextEntry::make('applicant.default_alamat_detail')
                             ->label('Alamat Detail')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state))
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.default_alamat_detail')))
                             ->columnSpanFull(),
 
                         Infolists\Components\TextEntry::make('applicant.default_rt')
                             ->label('RT')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.default_rt'))),
 
                         Infolists\Components\TextEntry::make('applicant.default_rw')
                             ->label('RW')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.default_rw'))),
 
                         Infolists\Components\TextEntry::make('applicant.default_kelurahan')
                             ->label('Kelurahan')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.default_kelurahan'))),
 
                         Infolists\Components\TextEntry::make('applicant.default_kecamatan')
                             ->label('Kecamatan')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.default_kecamatan'))),
 
                         Infolists\Components\TextEntry::make('applicant.default_kab_kota')
                             ->label('Kab/Kota')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.default_kab_kota'))),
 
                         Infolists\Components\TextEntry::make('applicant.default_provinsi')
                             ->label('Provinsi')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state)),
+                            ->getStateUsing(fn($record) => self::stringify(data_get($record, 'applicant.default_provinsi'))),
                     ])->columns(2),
 
                 Infolists\Components\Section::make('Detail Keperluan (Payload)')
                     ->schema([
                         Infolists\Components\TextEntry::make('payload_json')
                             ->label('Data Form (JSON)')
-                            ->formatStateUsing(fn ($state) => self::toSafeString($state))
+                            ->getStateUsing(fn($record) => self::stringify($record->payload_json))
                             ->extraAttributes([
                                 'class' => 'whitespace-pre-wrap font-mono text-xs',
                             ])
@@ -165,11 +171,17 @@ class ViewVerifikasiSlo extends ViewRecord
                     ->schema([
                         Infolists\Components\ImageEntry::make('applicant.foto_bangunan')
                             ->label('Foto Bangunan')
-                            ->disk('public'),
+                            ->disk('public')
+                            ->getStateUsing(fn ($record) => is_array(data_get($record, 'applicant.foto_bangunan'))
+                                ? (data_get($record, 'applicant.foto_bangunan.0') ?? null)
+                                : data_get($record, 'applicant.foto_bangunan')),
 
                         Infolists\Components\ImageEntry::make('applicant.foto_ktp_selfie')
                             ->label('Foto KTP/Selfie')
-                            ->disk('public'),
+                            ->disk('public')
+                            ->getStateUsing(fn ($record) => is_array(data_get($record, 'applicant.foto_ktp_selfie'))
+                                ? (data_get($record, 'applicant.foto_ktp_selfie.0') ?? null)
+                                : data_get($record, 'applicant.foto_ktp_selfie')),
                     ])->columns(2),
             ]);
     }
