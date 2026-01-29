@@ -26,15 +26,44 @@ class DistribusiUnitResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->where(function ($query) {
+                // Sesuai filter Verifikasi SLO Sukses
+                $query->where(function($q) {
+                    $q->where('status', \App\Enums\PermohonanStatus::VERIFIKASI_SLO)
+                      ->where('status_detail', \App\Enums\PermohonanDetailStatus::SLO_VALID);
+                })
+                // Atau yang sudah masuk tahap pembayaran keatas
+                ->orWhereIn('status', [
+                    \App\Enums\PermohonanStatus::MENUNGGU_PEMBAYARAN,
+                    \App\Enums\PermohonanStatus::SELESAI,
+                ]);
+            });
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('no_registrasi'),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('nomor_permohonan')
+                    ->label('No Permohonan')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('applicant.nama_lengkap')
+                    ->label('Pemohon')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('status_detail')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Tgl Update')
+                    ->dateTime(),
             ])
+            ->defaultSort('updated_at', 'desc')
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ]);
     }
 
@@ -42,8 +71,6 @@ class DistribusiUnitResource extends Resource
     {
         return [
             'index' => Pages\ListDistribusiUnits::route('/'),
-            'create' => Pages\CreateDistribusiUnit::route('/create'),
-            'edit' => Pages\EditDistribusiUnit::route('/{record}/edit'),
         ];
     }
 }

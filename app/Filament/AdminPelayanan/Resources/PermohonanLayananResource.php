@@ -59,15 +59,12 @@ class PermohonanLayananResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
-                Tables\Columns\TextColumn::make('status_detail')
-                    ->label('Detail')
-                    ->badge(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tanggal')
+                Tables\Columns\TextColumn::make('submitted_at')
+                    ->label('Tgl Submit')
                     ->dateTime()
                     ->sortable(),
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('submitted_at', 'desc')
             ->filters([
                 //
             ])

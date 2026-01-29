@@ -42,15 +42,28 @@ class ServiceRequest extends Model
     }
 
     // Scopes
-    public function scopeDraft($query)
+    public function scopeWaiting($query)
     {
-        return $query->where('is_draft', true);
+        // Menunggu Eksekusi: Draft yang belum disubmit ATAU yang dikembalikan (Gagal Verifikasi)
+        return $query->where(function($q) {
+            $q->where('is_draft', true)
+              ->orWhere('status_detail', PermohonanDetailStatus::VERIFIKASI_GAGAL->value);
+        });
     }
 
     public function scopeProcessing($query)
     {
+        // Sedang Berjalan: Sudah disubmit, tidak sedang dalam status "Gagal Verifikasi", 
+        // belum selesai, dan belum dibatalkan.
         return $query->where('is_draft', false)
-            ->whereIn('status', array_map(fn($s) => $s->value, PermohonanStatus::processing()))
+            ->where(function($q) {
+                $q->whereNull('status_detail')
+                  ->orWhere('status_detail', '!=', PermohonanDetailStatus::VERIFIKASI_GAGAL->value);
+            })
+            ->whereNotIn('status', [
+                PermohonanStatus::SELESAI->value,
+                PermohonanStatus::DIBATALKAN_ADMIN->value
+            ])
             ->whereNull('cancelled_at')
             ->whereNull('completed_at');
     }
@@ -91,24 +104,34 @@ class ServiceRequest extends Model
      * Transition status safely with validation and audit
      */
     public function transitionTo(
-        PermohonanStatus $status,
-        ?PermohonanDetailStatus $detail = null
-    ) {
+        PermohonanStatus|string $status,
+        PermohonanDetailStatus|string|null $detail = null
+    ): void {
+        $statusEnum = $status instanceof PermohonanStatus
+            ? $status
+            : PermohonanStatus::from($status);
+
+        $detailEnum = is_null($detail)
+            ? null
+            : ($detail instanceof PermohonanDetailStatus
+                ? $detail
+                : PermohonanDetailStatus::tryFrom((string)$detail));
+
         // Validate detail against status
-        if ($detail && !in_array($detail, $status->allowedDetails())) {
-            throw new \DomainException("Invalid status detail '{$detail->value}' for status '{$status->value}'");
+        if ($detailEnum && !in_array($detailEnum, $statusEnum->allowedDetails())) {
+            throw new \DomainException("Invalid status detail '{$detailEnum->value}' for status '{$statusEnum->value}'");
         }
 
-        DB::transaction(function () use ($status, $detail) {
+        DB::transaction(function () use ($statusEnum, $detailEnum) {
             $data = [
-                'status' => $status,
-                'status_detail' => $detail,
+                'status' => $statusEnum,
+                'status_detail' => $detailEnum,
                 'status_changed_at' => now(),
                 'status_changed_by' => auth()->id(),
             ];
 
             // If status is SELESAI, set completed_at
-            if ($status === PermohonanStatus::SELESAI && !$this->completed_at) {
+            if ($statusEnum === PermohonanStatus::SELESAI && !$this->completed_at) {
                 $data['completed_at'] = now();
             }
 
@@ -146,12 +169,46 @@ class ServiceRequest extends Model
         ];
 
         foreach ($mapping as $column => $value) {
-            // TIDAK overwrite jika sudah ada nilai (menggunakan blank() & filled() helper)
             if (blank($this->applicant->{$column}) && filled($value)) {
                 $this->applicant->{$column} = $value;
             }
         }
 
         $this->applicant->save();
+    }
+
+    /**
+     * SINKRONISASI LOKASI FISIK KE service_requests (Self)
+     */
+    public function syncLocationFromPayload(): void
+    {
+        $payload = $this->payload_json ?? [];
+        $lokasi  = data_get($payload, 'lokasi', []);
+
+        if (!is_array($lokasi) || empty($lokasi)) {
+            return;
+        }
+
+        $coords = data_get($lokasi, 'koordinat');
+        $lat = null;
+        $lng = null;
+
+        if ($coords && str_contains($coords, ',')) {
+            $parts = explode(',', $coords);
+            $lat = trim($parts[0]);
+            $lng = trim($parts[1] ?? null);
+        }
+
+        $this->update([
+            'lokasi_provinsi'        => data_get($lokasi, 'provinsi'),
+            'lokasi_kab_kota'        => data_get($lokasi, 'kab_kota'),
+            'lokasi_kecamatan'       => data_get($lokasi, 'kecamatan'),
+            'lokasi_kelurahan'       => data_get($lokasi, 'kelurahan'),
+            'lokasi_rt'              => data_get($lokasi, 'rt'),
+            'lokasi_rw'              => data_get($lokasi, 'rw'),
+            'lokasi_detail_tambahan' => data_get($lokasi, 'alamat_detail'),
+            'koordinat_lat'          => $lat,
+            'koordinat_lng'          => $lng,
+        ]);
     }
 }

@@ -51,6 +51,42 @@ class VerifikasiSloResource extends Resource
             ->defaultSort('submitted_at', 'asc')
             ->actions([
                 Tables\Actions\ViewAction::make()->label('Lihat detail permohonan'),
+                Tables\Actions\Action::make('verifikasiBerhasil')
+                    ->label('Verifikasi Berhasil')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Verifikasi SLO Berhasil?')
+                    ->modalDescription('Permohonan akan dilanjutkan ke tahap Distribusi Unit. Nomor resmi akan digenerate.')
+                    ->action(function (ServiceRequest $record) {
+                        \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
+                            $draftNo = $record->nomor_permohonan;
+                            preg_match('/(\d+)/', $draftNo, $matches);
+                            $digits = $matches[0] ?? null;
+
+                            if (!$digits) {
+                                throw new \Exception('Nomor draft tidak valid.');
+                            }
+
+                            $officialNo = 'PLN-UP3KUDUS-' . $digits;
+
+                            $record->update([
+                                'nomor_permohonan' => $officialNo,
+                                'is_draft' => false,
+                            ]);
+
+                            $record->transitionTo(
+                                \App\Enums\PermohonanStatus::VERIFIKASI_SLO,
+                                \App\Enums\PermohonanDetailStatus::SLO_VALID
+                            );
+                        });
+                        
+                        \Filament\Notifications\Notification::make()
+                            ->title('Verifikasi Berhasil')
+                            ->body('Nomor resmi: ' . $record->nomor_permohonan)
+                            ->success()
+                            ->send();
+                    }),
             ]);
     }
 

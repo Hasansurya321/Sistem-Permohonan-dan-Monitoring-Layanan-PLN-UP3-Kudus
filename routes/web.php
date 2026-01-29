@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\PelangganAuthController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\TambahDayaController;
 use App\Http\Controllers\PelangganProfileController;
+use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\PembayaranController;
 
 Route::get('/', function () {
     return view('landing');
@@ -69,38 +71,43 @@ Route::prefix('pegawai')->name('pegawai.')->group(function () {
 
 // Monitoring & Pembayaran (Protected)
 Route::middleware(['auth', 'customer.only'])->group(function () {
-    Route::get('/monitoring', [App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring');
-    Route::get('/monitoring/{id}', [App\Http\Controllers\MonitoringController::class, 'show'])->name('monitoring.show');
-    Route::get('/pembayaran', [App\Http\Controllers\PembayaranController::class, 'index'])->name('pembayaran');
+    Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
     
     // Protected Permohonan Forms - Wizard Tambah Daya
-    Route::get('/pelanggan/tambah-daya/step-1', [TambahDayaController::class, 'step1'])->name('tambah-daya.step1');
-    Route::post('/pelanggan/tambah-daya/step-1', [TambahDayaController::class, 'storeStep1'])->name('tambah-daya.step1.store');
+    Route::get('/pelanggan/tambah-daya/step1', [TambahDayaController::class, 'step1'])->name('tambah-daya.step1');
+    Route::post('/pelanggan/tambah-daya/step1', [TambahDayaController::class, 'storeStep1'])->name('tambah-daya.step1.store');
+
+    Route::get('/pelanggan/tambah-daya/step2', [TambahDayaController::class, 'step2'])->name('tambah-daya.step2');
+    Route::post('/pelanggan/tambah-daya/step2', [TambahDayaController::class, 'storeStep2'])->name('tambah-daya.step2.store');
     
     // Draft functionality
     Route::post('/pelanggan/permohonan/{id}/autosave', [TambahDayaController::class, 'autosave'])->name('tambah-daya.autosave');
     Route::get('/pelanggan/permohonan/{id}/resume', [TambahDayaController::class, 'resume'])->name('tambah-daya.resume');
     Route::delete('/pelanggan/permohonan/{id}/cancel', [TambahDayaController::class, 'cancel'])->name('tambah-daya.cancel');
     
-    Route::get('/pelanggan/tambah-daya/step-2', [TambahDayaController::class, 'step2'])->name('tambah-daya.step2');
-    Route::post('/pelanggan/tambah-daya/step-2', [TambahDayaController::class, 'storeStep2'])->name('tambah-daya.step2.store');
     
-    Route::get('/pelanggan/tambah-daya/step-3', [TambahDayaController::class, 'step3'])->name('tambah-daya.step3');
-    Route::post('/pelanggan/tambah-daya/step-3', [TambahDayaController::class, 'storeStep3'])->name('tambah-daya.step3.store');
+    Route::get('/pelanggan/tambah-daya/step3', [TambahDayaController::class, 'step3'])->name('tambah-daya.step3');
+    Route::post('/pelanggan/tambah-daya/step3', [TambahDayaController::class, 'storeStep3'])->name('tambah-daya.step3.store');
     Route::post('/pelanggan/tambah-daya/check-nik', [TambahDayaController::class, 'checkNik'])->name('tambah-daya.check-nik');
 
     // Step 4: Data SLO
-    Route::get('/pelanggan/tambah-daya/step-4', [TambahDayaController::class, 'step4'])->name('tambah-daya.step4');
-    Route::post('/pelanggan/tambah-daya/step-4', [TambahDayaController::class, 'storeStep4'])->name('tambah-daya.step4.store');
+    Route::get('/pelanggan/tambah-daya/step4', [TambahDayaController::class, 'step4'])->name('tambah-daya.step4');
+    Route::post('/pelanggan/tambah-daya/step4', [TambahDayaController::class, 'storeStep4'])->name('tambah-daya.step4.store');
     Route::post('/pelanggan/tambah-daya/check-slo', [TambahDayaController::class, 'checkSlo'])->name('tambah-daya.check-slo');
 
     // Step 5: Finalisasi & Data Lengkap
-    Route::get('/pelanggan/tambah-daya/step-5', [TambahDayaController::class, 'step5'])->name('tambah-daya.step5');
-    Route::post('/pelanggan/tambah-daya/step-5', [TambahDayaController::class, 'storeStep5'])->name('tambah-daya.step5.store');
+    Route::get('/pelanggan/tambah-daya/step5', [TambahDayaController::class, 'step5'])->name('tambah-daya.step5');
+    Route::post('/pelanggan/tambah-daya/step5', [TambahDayaController::class, 'storeStep5'])->name('tambah-daya.step5.store');
     
     // Step 5 Verifications
     Route::post('/pelanggan/tambah-daya/verify-kk', [TambahDayaController::class, 'verifyKK'])->name('tambah-daya.verify-kk');
     Route::post('/pelanggan/tambah-daya/verify-npwp', [TambahDayaController::class, 'verifyNPWP'])->name('tambah-daya.verify-npwp');
+    Route::post('/pelanggan/tambah-daya/verify-idpel', [TambahDayaController::class, 'verifyIdPelanggan'])->name('tambah-daya.verify-idpel');
+
+    // Monitoring Routes
+    Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoring');
+    Route::get('/monitoring/{id}', [MonitoringController::class, 'show'])->name('monitoring.show');
+    Route::post('/monitoring/{id}/pay', [MonitoringController::class, 'simulatePayment'])->name('monitoring.pay');
 
     // Profile Management
     Route::get('/pelanggan/profile', [PelangganProfileController::class, 'edit'])->name('pelanggan.profile');

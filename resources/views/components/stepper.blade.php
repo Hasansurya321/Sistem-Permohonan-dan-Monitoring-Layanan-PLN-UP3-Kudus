@@ -25,7 +25,7 @@
             @php
                 $isCompleted = $stepNum < $currentStep;
                 $isCurrent = $stepNum == $currentStep;
-                $isDisabled = $stepNum > 3; // Steps 4 & 5 disabled as per requirements
+                $isDisabled = false; // All steps enabled in this flow
             @endphp
 
             <div class="flex flex-col items-center relative group">

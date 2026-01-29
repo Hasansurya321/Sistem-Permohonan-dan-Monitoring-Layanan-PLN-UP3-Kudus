@@ -37,7 +37,7 @@
                     <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
                 </svg>
             @endif
-            {{ $req->status->getLabel() }}
+            {{ $req->status_detail ? $req->status_detail->getLabel() : $req->status->getLabel() }}
         </span>
     </div>
 
@@ -49,9 +49,12 @@
                 <div class="flex-1">
                     <h3 class="font-bold text-amber-900 mb-1">Pembayaran Diperlukan</h3>
                     <p class="text-amber-700 text-sm mb-3">Permohonan Anda sedang menunggu pembayaran. Silakan selesaikan pembayaran untuk melanjutkan proses.</p>
-                    <button disabled class="px-6 py-3 bg-amber-400 text-amber-900 font-bold rounded-lg cursor-not-allowed opacity-50">
-                        <i class="fas fa-credit-card mr-2"></i> Bayar Sekarang (Segera Hadir)
-                    </button>
+                    <form action="{{ route('monitoring.pay', $req->id) }}" method="POST" onsubmit="return confirm('Mulai simulasi pembayaran?')">
+                        @csrf
+                        <button type="submit" class="px-6 py-3 bg-amber-400 text-amber-900 font-bold rounded-lg hover:bg-amber-500 transition shadow-md">
+                            <i class="fas fa-credit-card mr-2"></i> Bayar Sekarang (Simulasi)
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -102,15 +105,59 @@
         <div class="bg-white rounded-xl border border-slate-200 p-6">
             <h3 class="font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">Lokasi</h3>
             <div class="text-sm">
-                <p class="font-semibold">{{ $req->lokasi_detail_tambahan }}</p>
-                <p class="text-slate-600 mt-1">
-                    RT {{ $req->lokasi_rt }} / RW {{ $req->lokasi_rw }},
-                    {{ $req->lokasi_kelurahan }}, {{ $req->lokasi_kecamatan }},
-                    {{ $req->lokasi_kab_kota }}, {{ $req->lokasi_provinsi }}
-                </p>
-                <div class="mt-4 p-3 bg-slate-50 rounded-lg text-xs text-slate-500">
-                    Koordinat: {{ $req->koordinat_lat }}, {{ $req->koordinat_lng }}
-                </div>
+                @php
+                    $hasLokasi = !empty($lokasi) && (
+                        !empty($lokasi['provinsi'] ?? null) ||
+                        !empty($lokasi['kab_kota'] ?? null) ||
+                        !empty($lokasi['kecamatan'] ?? null) ||
+                        !empty($lokasi['kelurahan'] ?? null) ||
+                        !empty($lokasi['rt'] ?? null) ||
+                        !empty($lokasi['rw'] ?? null) ||
+                        !empty($lokasi['koordinat'] ?? null) ||
+                        !empty($lokasi['alamat_detail'] ?? null)
+                    );
+                @endphp
+
+                @if($hasLokasi)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-xs text-slate-500">Koordinat</div>
+                            <div class="text-slate-800 font-semibold">{{ $lokasi['koordinat'] ?? '-' }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500">Provinsi</div>
+                            <div class="text-slate-800 font-semibold">{{ $lokasi['provinsi'] ?? '-' }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500">Kab/Kota</div>
+                            <div class="text-slate-800 font-semibold">{{ $lokasi['kab_kota'] ?? '-' }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500">Kecamatan</div>
+                            <div class="text-slate-800 font-semibold">{{ $lokasi['kecamatan'] ?? '-' }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500">Kelurahan/Desa</div>
+                            <div class="text-slate-800 font-semibold">{{ $lokasi['kelurahan'] ?? '-' }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500">RT / RW</div>
+                            <div class="text-slate-800 font-semibold">
+                                {{ $lokasi['rt'] ?? '-' }} / {{ $lokasi['rw'] ?? '-' }}
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <div class="text-xs text-slate-500">Detail tambahan</div>
+                            <div class="text-slate-800 font-semibold">{{ $lokasi['alamat_detail'] ?? '-' }}</div>
+                        </div>
+                    </div>
+                @else
+                    <div class="flex flex-col items-center py-4 text-slate-400 italic">
+                        <i class="fas fa-map-marked-alt text-2xl mb-2"></i>
+                        <span>Detail lokasi belum diisi atau tidak tersedia.</span>
+                    </div>
+                @endif
             </div>
         </div>
         

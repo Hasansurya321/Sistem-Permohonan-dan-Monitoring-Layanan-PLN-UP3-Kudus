@@ -22,7 +22,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                     <!-- Option: Self -->
                     <label class="relative cursor-pointer group">
-                        <input type="radio" name="for_whom" value="self" class="peer sr-only" {{ old('for_whom', $wizard['for_whom']) === 'self' ? 'checked' : '' }} onchange="toggleSection('self')">
+                        <input type="radio" name="for_whom" value="self" class="peer sr-only" {{ old('for_whom', data_get($wizard, 'for_whom')) === 'self' ? 'checked' : '' }} onchange="toggleSection('self')">
+
                          <div class="p-6 rounded-2xl border-2 border-slate-200 peer-checked:border-[#2F5AA8] peer-checked:bg-blue-50/50 hover:border-blue-100 transition-all text-center h-full flex flex-col justify-center items-center gap-3">
                             <div class="w-12 h-12 rounded-full bg-blue-100 text-[#2F5AA8] flex items-center justify-center text-xl">
                                 <i class="fas fa-user"></i>
@@ -36,7 +37,8 @@
 
                     <!-- Option: Other -->
                     <label class="relative cursor-pointer group">
-                        <input type="radio" name="for_whom" value="other" class="peer sr-only" {{ old('for_whom', $wizard['for_whom']) === 'other' ? 'checked' : '' }} onchange="toggleSection('other')">
+                        <input type="radio" name="for_whom" value="other" class="peer sr-only" {{ old('for_whom', data_get($wizard, 'for_whom')) === 'other' ? 'checked' : '' }} onchange="toggleSection('other')">
+
                         <div class="p-6 rounded-2xl border-2 border-slate-200 peer-checked:border-[#2F5AA8] peer-checked:bg-blue-50/50 hover:border-blue-100 transition-all text-center h-full flex flex-col justify-center items-center gap-3">
                             <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xl">
                                 <i class="fas fa-users"></i>
@@ -130,7 +132,8 @@
 
                 <!-- Navigation Buttons -->
                 <div class="mt-10 flex justify-between pt-6 border-t border-slate-100">
-                    @if(!empty($wizard['service_request_id']))
+                    @if(!empty(data_get($wizard, 'service_request_id')))
+
                         <button type="button" onclick="if(confirm('Yakin ingin membatalkan dan menghapus draft permohonan ini?')) document.getElementById('cancel-draft-form').submit();" class="px-6 py-3 text-red-500 font-semibold hover:text-red-700 transition">
                             Batalkan Pengisian
                         </button>
@@ -145,8 +148,10 @@
                 </div>
             </form>
             
-            @if(!empty($wizard['service_request_id']))
-            <form id="cancel-draft-form" action="{{ route('tambah-daya.cancel', $wizard['service_request_id']) }}" method="POST" class="hidden">
+            @if(!empty(data_get($wizard, 'service_request_id')))
+
+            <form id="cancel-draft-form" action="{{ route('tambah-daya.cancel', data_get($wizard, 'service_request_id')) }}" method="POST" class="hidden">
+
                 @csrf @method('DELETE')
             </form>
             @endif
@@ -158,13 +163,22 @@
     let isNikVerified = false;
     let isIdPelVerified = false;
     // For self, nik is implicitly verified if exists
-    let isSelf = {{ old('for_whom', $wizard['for_whom']) === 'self' || $wizard['for_whom'] === null ? 'true' : 'false' }};
+    let isSelf = {{ old('for_whom', data_get($wizard, 'for_whom')) === 'self' || data_get($wizard, 'for_whom') === null ? 'true' : 'false' }};
+
     const hasProfileNik = {{ !empty($user->nik) ? 'true' : 'false' }};
 
     function toggleSection(val) {
         document.getElementById('section-self').classList.add('hidden');
         document.getElementById('section-other').classList.add('hidden');
         
+        // Reset verifications when switching context
+        isNikVerified = false;
+        isIdPelVerified = false;
+        document.getElementById('nik-success').classList.add('hidden');
+        document.getElementById('nik-error').classList.add('hidden');
+        document.getElementById('idpel-success').classList.add('hidden');
+        document.getElementById('idpel-error').classList.add('hidden');
+
         if (val === 'self') {
             document.getElementById('section-self').classList.remove('hidden');
             isSelf = true;
@@ -192,7 +206,7 @@
         }
 
         try {
-            const response = await fetch("{{ route('tambah-daya.check-nik') }}", {
+            const response = await fetch("{{ route('tambah-daya.verify-idpel') }}", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -201,7 +215,7 @@
                 },
                 body: JSON.stringify({ 
                     id_pelanggan: idpel,
-                    mode: isSelf ? 'self' : 'other'
+                    for_whom: isSelf ? 'self' : 'other'
                 })
             });
 
@@ -258,6 +272,11 @@
                 document.getElementById('verified-id').classList.add('hidden'); // Hide details as requested
                 successDiv.classList.remove('hidden');
                 isNikVerified = true;
+                
+                // Clear ID Pel verification if NIK changes to force re-validation
+                isIdPelVerified = false;
+                document.getElementById('idpel-success').classList.add('hidden');
+                document.getElementById('idpel-error').classList.add('hidden');
             } else {
                 errorDiv.querySelector('span').innerText = result.message || 'NIK tidak ditemukan.';
                 errorDiv.classList.remove('hidden');

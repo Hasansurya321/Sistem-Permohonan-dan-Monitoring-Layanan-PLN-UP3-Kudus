@@ -23,6 +23,10 @@ enum PermohonanDetailStatus: string
     // MENUNGGU_PEMBAYARAN
     case TAGIHAN_TERBIT = 'TAGIHAN_TERBIT';
     case PEMBAYARAN_SELESAI = 'PEMBAYARAN_SELESAI';
+    
+    // Legacy / Safety
+    case MENUNGGU_PEMBAYARAN = 'MENUNGGU_PEMBAYARAN';
+    case VERIFIKASI_GAGAL = 'VERIFIKASI_GAGAL';
 
     // KONSTRUKSI_INSTALASI
     case KONSTRUKSI_JARINGAN = 'KONSTRUKSI_JARINGAN';
@@ -42,7 +46,7 @@ enum PermohonanDetailStatus: string
     {
         return match($this) {
             self::MENUNGGU_VERIFIKASI => 'Menunggu Verifikasi',
-            self::SLO_VALID => 'SLO Valid',
+            self::SLO_VALID => 'SLO di-upload & valid',
             self::DOKUMEN_TIDAK_VALID => 'Dokumen Tidak Valid',
             self::DITERUSKAN_KE_SURVEY => 'Diteruskan ke Survey',
             self::SURVEY_BARU => 'Survey Baru',
@@ -53,6 +57,8 @@ enum PermohonanDetailStatus: string
             self::MATERIAL_MENUNGGU => 'Material Menunggu',
             self::TAGIHAN_TERBIT => 'Tagihan Terbit',
             self::PEMBAYARAN_SELESAI => 'Pembayaran Selesai',
+            self::MENUNGGU_PEMBAYARAN => 'Menunggu Pembayaran',
+            self::VERIFIKASI_GAGAL => 'Verifikasi Gagal (Dokumen/Data)',
             self::KONSTRUKSI_JARINGAN => 'Konstruksi Jaringan',
             self::INSTALASI_PELANGGAN => 'Instalasi Pelanggan',
             self::KONSTRUKSI_PROGRESS => 'Progress Konstruksi',

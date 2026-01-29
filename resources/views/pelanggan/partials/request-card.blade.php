@@ -10,8 +10,12 @@
         $statusIcon = 'x-circle';
     } else {
         $mainStatus = $req->status->getLabel();
-        $detailStatus = $req->status_detail?->getLabel();
-        $statusLabel = $detailStatus ? "{$mainStatus} ; {$detailStatus}" : $mainStatus;
+        $detailEnum = $req->status_detail; // Already tryFrom via accessor
+        $detailLabel = $detailEnum?->getLabel();
+        
+        // If detail is null but we have a raw value in the DB (accessed via getRawOriginal or if we need to see dirty data)
+        // However, with the accessor it's safer.
+        $statusLabel = $detailLabel ? "{$mainStatus} : {$detailLabel}" : $mainStatus;
         $statusClasses = $isDraft 
             ? 'bg-yellow-50 text-yellow-700 border-yellow-200' 
             : 'bg-blue-50 text-[#2F5AA8] border-blue-200';

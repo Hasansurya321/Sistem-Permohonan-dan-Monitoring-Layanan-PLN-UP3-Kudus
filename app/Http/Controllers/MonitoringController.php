@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ServiceRequest;
+use App\Models\Payment;
 use App\Enums\PermohonanStatus;
+use App\Enums\PermohonanDetailStatus;
 
 class MonitoringController extends Controller
 {
@@ -31,11 +33,11 @@ class MonitoringController extends Controller
         // Filter by tab
         switch($tab) {
             case 'waiting':
-                $requests = $query->draft()->latest('updated_at')->get();
+                $requests = $query->waiting()->latest('updated_at')->get();
                 break;
             
             case 'processing':
-                $requests = $query->processing()->latest('updated_at')->get();
+                $requests = $query->processing()->latest('submitted_at')->get();
                 break;
             
             case 'done':
@@ -50,7 +52,7 @@ class MonitoringController extends Controller
         }
 
         $counts = [
-            'waiting' => ServiceRequest::where('submitter_user_id', Auth::id())->draft()->count(),
+            'waiting' => ServiceRequest::where('submitter_user_id', Auth::id())->waiting()->count(),
             'processing' => ServiceRequest::where('submitter_user_id', Auth::id())->processing()->count(),
             'done' => ServiceRequest::where('submitter_user_id', Auth::id())->done()->count(),
         ];
@@ -75,9 +77,39 @@ class MonitoringController extends Controller
         
         $shouldShowStepper = $req->isProcessing() || $req->status === PermohonanStatus::SELESAI;
         
-        // Check if payment is needed
-        $showPaymentCTA = $req->status === PermohonanStatus::MENUNGGU_PEMBAYARAN;
+        // Check if payment is needed (only if not already paid)
+        $showPaymentCTA = ($req->status === PermohonanStatus::MENUNGGU_PEMBAYARAN) && 
+                          ($req->status_detail !== PermohonanDetailStatus::PEMBAYARAN_SELESAI);
 
-        return view('pelanggan.monitoring.show', compact('req', 'steps', 'currentStepIndex', 'shouldShowStepper', 'showPaymentCTA'));
+        $payload = $req->payload_json ?? [];
+        $lokasi  = data_get($payload, 'lokasi', []);
+
+        return view('pelanggan.monitoring.show', compact('req', 'steps', 'currentStepIndex', 'shouldShowStepper', 'showPaymentCTA', 'payload', 'lokasi'));
+    }
+    public function simulatePayment($id)
+    {
+        $req = ServiceRequest::where('submitter_user_id', Auth::id())
+            ->where('status', PermohonanStatus::MENUNGGU_PEMBAYARAN)
+            ->findOrFail($id);
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($req) {
+            // Success simulation
+            $req->transitionTo(
+                PermohonanStatus::MENUNGGU_PEMBAYARAN,
+                PermohonanDetailStatus::PEMBAYARAN_SELESAI
+            );
+
+            // Create Payment record
+            Payment::updateOrCreate(
+                ['service_request_id' => $req->id],
+                [
+                    'amount' => 500000, // Dummy
+                    'status' => 'SUKSES',
+                    'transaction_id' => 'TRX-' . time() . '-' . $req->id
+                ]
+            );
+        });
+
+        return back()->with('success', 'Pembayaran berhasil dikonfirmasi (Simulasi).');
     }
 }

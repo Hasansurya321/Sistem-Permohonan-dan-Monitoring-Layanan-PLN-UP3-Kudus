@@ -10,7 +10,7 @@
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M16.862 3.487a2.5 2.5 0 0 1 3.536 3.536L7.5 19.92l-4.5 1 1-4.5L16.862 3.487Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Menunggu Tindakan</span>
+                <span>Menunggu Eksekusi</span>
                 @if($counts['waiting'] > 0)
                     <span class="ml-1 px-2 py-0.5 bg-yellow-500 text-white text-xs rounded-full">{{ $counts['waiting'] }}</span>
                 @endif
@@ -26,7 +26,7 @@
                     <path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
                 </svg>
-                <span>Sedang Diproses</span>
+                <span>Sedang Berjalan</span>
                 @if($counts['processing'] > 0)
                     <span class="ml-1 px-2 py-0.5 bg-[#2F5AA8] text-white text-xs rounded-full">{{ $counts['processing'] }}</span>
                 @endif
