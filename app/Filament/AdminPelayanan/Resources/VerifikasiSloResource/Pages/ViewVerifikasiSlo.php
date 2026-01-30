@@ -27,67 +27,16 @@ class ViewVerifikasiSlo extends ViewRecord
     {
         $record = $this->record;
 
-        // Idempotency: Check if already verified OR number already official format
-        // Checks if status is SLO_VALID OR if nomor_permohonan starts with PLN-UP3KUDUS
-        $isOfficialFormat = preg_match('/^PLN-UP3KUDUS-\d+$/', (string) $record->nomor_permohonan);
-        
-        if ($record->status_detail === PermohonanDetailStatus::SLO_VALID || $isOfficialFormat) {
-            \Filament\Notifications\Notification::make()
-                ->title('Informasi')
-                ->body('Data ini sudah pernah diverifikasi sukses.')
-                ->info()
-                ->send();
-            
-            // Redirect using route name to avoid 404
-            $target = route('filament.admin-pelayanan.resources.distribusi-units.index');
-            $this->redirect($target);
-            return;
-        }
-
         try {
-            \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
-                $draftNo = (string) $record->nomor_permohonan;
-                
-                // Robust digit extraction
-                preg_match_all('/\d+/', $draftNo, $matches);
-                $digits = !empty($matches[0]) ? end($matches[0]) : null;
-
-                if (!$digits) {
-                    throw new \Exception('Nomor draft tidak valid (tidak ada angka), tidak bisa generate nomor resmi.');
-                }
-
-                $officialNo = 'PLN-UP3KUDUS-' . $digits;
-
-                // Uniqueness check
-                $exists = \App\Models\ServiceRequest::where('nomor_permohonan', $officialNo)
-                    ->where('id', '!=', $record->id)
-                    ->exists();
-
-                if ($exists) {
-                    throw new \Exception('Nomor permohonan bentrok/sudah ada: ' . $officialNo);
-                }
-
-                // Update record
-                $record->update([
-                    'nomor_permohonan' => $officialNo,
-                    'is_draft' => false,
-                    // Directly setting status_detail as requested
-                    'status_detail' => PermohonanDetailStatus::SLO_VALID,
-                ]);
-
-                // Maintain main status verification
-                // $record->transitionTo(...) is optional if we just update detail, 
-                // but usually better to keep history. Since requirement is specific on updates:
-                // We'll stick to the Transaction block update above which covers the requirement.
-            });
+            $record->finalizeSloVerificationAndAutoAdvance();
 
             \Filament\Notifications\Notification::make()
-                ->title('Verifikasi Sukses')
-                ->body('Nomor permohonan resmi: ' . $this->record->nomor_permohonan)
+                ->title('Verifikasi Berhasil')
+                ->body('Nomor resmi: ' . $record->nomor_permohonan . '. Data diteruskan ke Distribusi Unit.')
                 ->success()
                 ->send();
 
-            // Redirect using route name to avoid 404
+            // Redirect to Distribusi Unit index
             $target = route('filament.admin-pelayanan.resources.distribusi-units.index');
             $this->redirect($target);
 

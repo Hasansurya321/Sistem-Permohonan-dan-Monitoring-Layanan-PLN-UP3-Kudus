@@ -7,38 +7,48 @@
         <i class="fas fa-arrow-left"></i> Kembali ke Monitoring
     </a>
 
-    {{-- Status Badge --}}
-    <div class="mb-6">
-        <span class="px-4 py-2 rounded-full text-sm font-bold border inline-flex items-center gap-2
-                     {{ $req->isDraft() ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : '' }}
-                     {{ $req->isProcessing() ? 'bg-blue-50 text-[#2F5AA8] border-blue-200' : '' }}
-                     {{ $req->isDone() ? 'bg-green-50 text-green-700 border-green-200' : '' }}">
-            {{-- Static SVG Icon --}}
-            @if($req->isDraft())
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M16.862 3.487a2.5 2.5 0 0 1 3.536 3.536L7.5 19.92l-4.5 1 1-4.5L16.862 3.487Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            @elseif($req->isProcessing())
-                @if($req->status === App\Enums\PermohonanStatus::MENUNGGU_PEMBAYARAN)
+    {{-- Status Badge & Request Number --}}
+    <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-800 mb-1">
+                {{ $req->isDraft() ? 'Draft Permohonan' : 'Permohonan Layanan' }}
+            </h1>
+            <div class="text-slate-500 font-mono text-sm">
+                No: {{ $req->isDraft() ? ($req->draft_number ?? 'DRAFT') : $req->nomor_permohonan }}
+            </div>
+        </div>
+        <div>
+            <span class="px-4 py-2 rounded-full text-sm font-bold border inline-flex items-center gap-2
+                         {{ $req->isDraft() ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : '' }}
+                         {{ $req->isProcessing() ? 'bg-blue-50 text-[#2F5AA8] border-blue-200' : '' }}
+                         {{ $req->isDone() ? 'bg-green-50 text-green-700 border-green-200' : '' }}">
+                {{-- Static SVG Icon --}}
+                @if($req->isDraft())
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M16.862 3.487a2.5 2.5 0 0 1 3.536 3.536L7.5 19.92l-4.5 1 1-4.5L16.862 3.487Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
+                @elseif($req->isProcessing())
+                    @if($req->status === App\Enums\PermohonanStatus::MENUNGGU_PEMBAYARAN)
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    @else
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    @endif
                 @else
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
                     </svg>
                 @endif
-            @else
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
-                </svg>
-            @endif
-            {{ $req->status_detail ? $req->status_detail->getLabel() : $req->status->getLabel() }}
-        </span>
+                {{ $req->status_detail ? $req->status_detail->getLabel() : $req->status->getLabel() }}
+            </span>
+        </div>
     </div>
 
     {{-- Payment CTA (if applicable) --}}
@@ -63,7 +73,82 @@
     {{-- Stepper (only for processing/completed requests) --}}
     @if($shouldShowStepper && $currentStepIndex !== null)
         <x-monitoring.stepper :steps="$steps" :currentIndex="$currentStepIndex" />
-        <div class="h-6"></div>
+        <div class="h-8"></div>
+
+        {{-- RIWAYAT PROSES (TOGGLE TABLE) --}}
+        @if(isset($events) && $events->count() > 0)
+        <div class="mb-8" x-data="{ expanded: false }">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <h3 class="font-bold text-slate-800 text-lg">Riwayat Proses</h3>
+                <button @click="expanded = !expanded" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 focus:outline-none transition-colors px-3 py-1 bg-blue-50 rounded-lg">
+                    <span x-text="expanded ? 'Tutup detail' : 'Lihat detail'"></span>
+                    <i class="fas" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                </button>
+            </div>
+
+            <!-- Collapsed View: Last Event (One Line) -->
+            <div x-show="!expanded" @click="expanded = true" class="bg-white rounded-xl border border-slate-200 p-4 hover:border-blue-200 transition-colors cursor-pointer shadow-sm group">
+                @php $latest = $events->first(); @endphp
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-xs">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div>
+                            <span class="text-sm font-bold text-slate-800">Update Terakhir:</span>
+                            <span class="text-sm text-slate-600 ml-1">
+                                {{ $latest->status_detail ? $latest->status_detail->getLabel() : $latest->status->getLabel() }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-mono text-slate-400">
+                            {{ $latest->occurred_at->translatedFormat('d M Y, H:i') }}
+                        </span>
+                        <i class="fas fa-chevron-right text-xs text-slate-300 group-hover:text-blue-400 transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expanded View: Full Table -->
+            <div x-show="expanded" x-collapse>
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200">
+                                    <th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Status Detail</th>
+                                    <th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Status Utama</th>
+                                    <th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Waktu</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                @foreach($events as $event)
+                                <tr class="{{ $loop->first ? 'bg-blue-50/30' : '' }} hover:bg-slate-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold text-sm {{ $loop->first ? 'text-blue-700' : 'text-slate-700' }}">
+                                            {{ $event->status_detail ? $event->status_detail->getLabel() : '-' }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $loop->first ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-600' }}">
+                                            {{ $event->status->getLabel() }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-xs font-mono text-slate-500">
+                                            {{ $event->occurred_at->translatedFormat('d M Y, H:i') }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     @endif
 
     {{-- Cancellation Notice (if cancelled) --}}

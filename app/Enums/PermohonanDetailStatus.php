@@ -8,7 +8,7 @@ enum PermohonanDetailStatus: string
     case MENUNGGU_VERIFIKASI = 'MENUNGGU_VERIFIKASI';
     case SLO_VALID = 'SLO_VALID';
     case DOKUMEN_TIDAK_VALID = 'DOKUMEN_TIDAK_VALID';
-    case DITERUSKAN_KE_SURVEY = 'DITERUSKAN_KE_SURVEY';
+    case DITERUSKAN_UNIT_SURVEY = 'DITERUSKAN_UNIT_SURVEY'; // Renamed
 
     // SURVEY_LAPANGAN
     case SURVEY_BARU = 'SURVEY_BARU';
@@ -16,7 +16,7 @@ enum PermohonanDetailStatus: string
     case SURVEY_SELESAI = 'SURVEY_SELESAI';
 
     // PERENCANAAN_MATERIAL
-    case MATERIAL_ANALISA = 'MATERIAL_ANALISA';
+    case ANALISA_KEBUTUHAN_MATERIAL = 'ANALISA_KEBUTUHAN_MATERIAL'; // Renamed
     case MATERIAL_TERSEDIA = 'MATERIAL_TERSEDIA';
     case MATERIAL_MENUNGGU = 'MATERIAL_MENUNGGU';
 
@@ -31,16 +31,9 @@ enum PermohonanDetailStatus: string
     // KONSTRUKSI_INSTALASI
     case KONSTRUKSI_JARINGAN = 'KONSTRUKSI_JARINGAN';
     case INSTALASI_PELANGGAN = 'INSTALASI_PELANGGAN';
-    case KONSTRUKSI_PROGRESS = 'KONSTRUKSI_PROGRESS';
+    case KONSTRUKSI_PROGRESS = 'KONSTRUKSI_PROGRESS'; // Renamed case if needed, checking standard
 
-    // PENYALAAN_TE
-    case PENYALAAN_BERHASIL = 'PENYALAAN_BERHASIL';
-    case KONFIRMASI_NYALA = 'KONFIRMASI_NYALA';
-
-    // SELESAI
-    case ADMINISTRASI_AKHIR = 'ADMINISTRASI_AKHIR';
-    case FINISH = 'FINISH';
-    case CLOSE = 'CLOSE';
+    // ...
 
     public function getLabel(): string
     {
@@ -48,14 +41,14 @@ enum PermohonanDetailStatus: string
             self::MENUNGGU_VERIFIKASI => 'Menunggu Verifikasi',
             self::SLO_VALID => 'SLO di-upload & valid',
             self::DOKUMEN_TIDAK_VALID => 'Dokumen Tidak Valid',
-            self::DITERUSKAN_KE_SURVEY => 'Diteruskan ke Survey',
-            self::SURVEY_BARU => 'Survey Baru',
-            self::SURVEY_DIJADWALKAN => 'Survey Dijadwalkan',
-            self::SURVEY_SELESAI => 'Survey Selesai',
-            self::MATERIAL_ANALISA => 'Analisa Material',
-            self::MATERIAL_TERSEDIA => 'Material Tersedia',
+            self::DITERUSKAN_UNIT_SURVEY => 'Diteruskan ke unit survey', // Updated label
+            self::SURVEY_BARU => 'Baru', // Updated label
+            self::SURVEY_DIJADWALKAN => 'Dijadwalkan', // Updated label
+            self::SURVEY_SELESAI => 'Selesai', // Updated label
+            self::ANALISA_KEBUTUHAN_MATERIAL => 'Analisa kebutuhan material', // Updated label
+            self::MATERIAL_TERSEDIA => 'Tersedia', // Updated label
             self::MATERIAL_MENUNGGU => 'Material Menunggu',
-            self::TAGIHAN_TERBIT => 'Tagihan Terbit',
+            self::TAGIHAN_TERBIT => 'Tagihan terbit', // Updated label
             self::PEMBAYARAN_SELESAI => 'Pembayaran Selesai',
             self::MENUNGGU_PEMBAYARAN => 'Menunggu Pembayaran',
             self::VERIFIKASI_GAGAL => 'Verifikasi Gagal (Dokumen/Data)',

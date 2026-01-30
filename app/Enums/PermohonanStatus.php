@@ -118,7 +118,7 @@ enum PermohonanStatus: string
                 PermohonanDetailStatus::MENUNGGU_VERIFIKASI,
                 PermohonanDetailStatus::SLO_VALID,
                 PermohonanDetailStatus::DOKUMEN_TIDAK_VALID,
-                PermohonanDetailStatus::DITERUSKAN_KE_SURVEY,
+                PermohonanDetailStatus::DITERUSKAN_UNIT_SURVEY,
             ],
             self::SURVEY_LAPANGAN => [
                 PermohonanDetailStatus::SURVEY_BARU,
@@ -126,7 +126,7 @@ enum PermohonanStatus: string
                 PermohonanDetailStatus::SURVEY_SELESAI,
             ],
             self::PERENCANAAN_MATERIAL => [
-                PermohonanDetailStatus::MATERIAL_ANALISA,
+                PermohonanDetailStatus::ANALISA_KEBUTUHAN_MATERIAL,
                 PermohonanDetailStatus::MATERIAL_TERSEDIA,
                 PermohonanDetailStatus::MATERIAL_MENUNGGU,
             ],

@@ -150,6 +150,7 @@ class TambahDayaController extends Controller
              ]);
              $wizard['service_request_id'] = $sr->id;
              $sr->syncLocationFromPayload();
+             $sr->ensureInitialEvent();
         } else {
              $sr = ServiceRequest::find($wizard['service_request_id']);
              $sr->update([
@@ -279,6 +280,14 @@ class TambahDayaController extends Controller
 
             $ser->syncApplicantFromPayloadSafely();
             $ser->syncLocationFromPayload();
+
+            // Create submission event manually since we used update()
+            \App\Models\ServiceRequestEvent::create([
+                'service_request_id' => $ser->id,
+                'status' => PermohonanStatus::DITERIMA_PLN,
+                'status_detail' => \App\Enums\PermohonanDetailStatus::MENUNGGU_VERIFIKASI,
+                'occurred_at' => $ser->submitted_at,
+            ]);
 
             return $ser;
         });

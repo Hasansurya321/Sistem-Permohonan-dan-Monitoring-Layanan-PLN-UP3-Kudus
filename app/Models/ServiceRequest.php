@@ -41,7 +41,29 @@ class ServiceRequest extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function events()
+    {
+        return $this->hasMany(ServiceRequestEvent::class, 'service_request_id')
+            ->orderByDesc('occurred_at')
+            ->orderByDesc('id');
+    }
+
     // Scopes
+    public function scopeSubmitted($query)
+    {
+        return $query->whereNotNull('submitted_at')->where('is_draft', false);
+    }
+
+    public function scopeOngoing($query)
+    {
+        return $query->where('status', '!=', PermohonanStatus::SELESAI);
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', PermohonanStatus::SELESAI);
+    }
+
     public function scopeWaiting($query)
     {
         // Menunggu Eksekusi: Draft yang belum disubmit ATAU yang dikembalikan (Gagal Verifikasi)
@@ -136,6 +158,14 @@ class ServiceRequest extends Model
             }
 
             $this->update($data);
+
+            // Log event for timeline
+            ServiceRequestEvent::create([
+                'service_request_id' => $this->id,
+                'status' => $statusEnum,
+                'status_detail' => $detailEnum,
+                'occurred_at' => now(),
+            ]);
         });
     }
 
@@ -211,4 +241,152 @@ class ServiceRequest extends Model
             'koordinat_lng'          => $lng,
         ]);
     }
+    /**
+     * Finalize SLO verification, generate official number, and auto-advance to payment.
+     * Includes comprehensive event logging to skip intermediate steps for testing.
+     */
+    public function finalizeSloVerificationAndAutoAdvance(): void
+    {
+        // Idempotency check: Already at or past TAGIHAN_TERBIT
+        if (!$this->is_draft && 
+            $this->status === PermohonanStatus::MENUNGGU_PEMBAYARAN && 
+            $this->status_detail === PermohonanDetailStatus::TAGIHAN_TERBIT) {
+            
+            // Further check: Do events already exist for this state?
+            if ($this->events()->where('status', PermohonanStatus::MENUNGGU_PEMBAYARAN)->exists()) {
+                return;
+            }
+        }
+
+        DB::transaction(function () {
+            $draftNo = (string) $this->nomor_permohonan;
+            
+            // Robust digit extraction: take the last sequence of digits
+            preg_match_all('/\d+/', $draftNo, $matches);
+            $digits = !empty($matches[0]) ? end($matches[0]) : null;
+
+            if (!$digits) {
+                throw new \Exception('Nomor draft tidak valid (tidak ada angka).');
+            }
+
+            // Official number: PLN-UP3KUDUS- digits
+            $officialNo = 'PLN-UP3KUDUS-' . $digits;
+
+            // Uniqueness check for official number
+            $exists = self::where('nomor_permohonan', $officialNo)
+                ->where('id', '!=', $this->id)
+                ->exists();
+
+            if ($exists) {
+                throw new \Exception('Nomor resmi ' . $officialNo . ' sudah digunakan oleh permohonan lain.');
+            }
+
+            // Update main record
+            $this->update([
+                'nomor_permohonan' => $officialNo,
+                'is_draft' => false,
+                'status' => PermohonanStatus::MENUNGGU_PEMBAYARAN,
+                'status_detail' => PermohonanDetailStatus::TAGIHAN_TERBIT,
+                'status_changed_at' => now(),
+                'status_changed_by' => auth()->id(),
+            ]);
+
+            // --- Log Audit Trail (Comprehensive Events) ---
+            $now = now();
+            $events = [
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::DITERIMA_PLN->value,
+                    'status_detail' => PermohonanDetailStatus::MENUNGGU_VERIFIKASI->value, // Fix null error
+                    'occurred_at' => $now->copy()->subSeconds(9),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::VERIFIKASI_SLO->value,
+                    'status_detail' => PermohonanDetailStatus::SLO_VALID->value,
+                    'occurred_at' => $now->copy()->subSeconds(8),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::VERIFIKASI_SLO->value,
+                    'status_detail' => PermohonanDetailStatus::DITERUSKAN_UNIT_SURVEY->value,
+                    'occurred_at' => $now->copy()->subSeconds(7),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::SURVEY_LAPANGAN->value,
+                    'status_detail' => PermohonanDetailStatus::SURVEY_BARU->value,
+                    'occurred_at' => $now->copy()->subSeconds(6),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::SURVEY_LAPANGAN->value,
+                    'status_detail' => PermohonanDetailStatus::SURVEY_DIJADWALKAN->value,
+                    'occurred_at' => $now->copy()->subSeconds(5),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::SURVEY_LAPANGAN->value,
+                    'status_detail' => PermohonanDetailStatus::SURVEY_SELESAI->value,
+                    'occurred_at' => $now->copy()->subSeconds(4),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::PERENCANAAN_MATERIAL->value,
+                    'status_detail' => PermohonanDetailStatus::ANALISA_KEBUTUHAN_MATERIAL->value,
+                    'occurred_at' => $now->copy()->subSeconds(3),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::PERENCANAAN_MATERIAL->value,
+                    'status_detail' => PermohonanDetailStatus::MATERIAL_TERSEDIA->value,
+                    'occurred_at' => $now->copy()->subSeconds(2),
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+                [
+                    'service_request_id' => $this->id,
+                    'status' => PermohonanStatus::MENUNGGU_PEMBAYARAN->value,
+                    'status_detail' => PermohonanDetailStatus::TAGIHAN_TERBIT->value,
+                    'occurred_at' => $now,
+                    'created_at' => $now, 'updated_at' => $now,
+                ],
+            ];
+
+            ServiceRequestEvent::insert($events);
+        });
+    }
+
+    /**
+     * Ensure a ServiceRequest has at least one event record for timeline display.
+     */
+    public function ensureInitialEvent(): void
+    {
+        if ($this->events()->count() > 0) {
+            return;
+        }
+
+        $status = $this->status ?? PermohonanStatus::DRAFT;
+        $detail = $this->status_detail;
+        $occurredAt = $this->created_at ?? now();
+
+        // If it was submitted, occurred_at should ideally be submitted_at
+        if (!$this->is_draft && $this->submitted_at) {
+            $occurredAt = $this->submitted_at;
+        }
+
+        ServiceRequestEvent::create([
+            'service_request_id' => $this->id,
+            'status' => $status,
+            'status_detail' => $detail,
+            'occurred_at' => $occurredAt,
+        ]);
+    }
 }
+

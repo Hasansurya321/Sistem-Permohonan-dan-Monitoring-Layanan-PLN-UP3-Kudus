@@ -62,9 +62,11 @@ class MonitoringController extends Controller
 
     public function show($id)
     {
-        $req = ServiceRequest::with(['applicant'])
+        $req = ServiceRequest::with(['applicant', 'events'])
             ->where('submitter_user_id', Auth::id())
             ->findOrFail($id);
+
+        $req->ensureInitialEvent();
 
         // Build stepper data (only for processing/completed requests)
         $steps = PermohonanStatus::getStepperLabels();
@@ -83,8 +85,14 @@ class MonitoringController extends Controller
 
         $payload = $req->payload_json ?? [];
         $lokasi  = data_get($payload, 'lokasi', []);
+        
+        // Fetch timeline events safely (Fallback if table not exists)
+        $events = collect();
+        if (\Illuminate\Support\Facades\Schema::hasTable('service_request_events')) {
+            $events = $req->events;
+        }
 
-        return view('pelanggan.monitoring.show', compact('req', 'steps', 'currentStepIndex', 'shouldShowStepper', 'showPaymentCTA', 'payload', 'lokasi'));
+        return view('pelanggan.monitoring.show', compact('req', 'steps', 'currentStepIndex', 'shouldShowStepper', 'showPaymentCTA', 'payload', 'lokasi', 'events'));
     }
     public function simulatePayment($id)
     {
