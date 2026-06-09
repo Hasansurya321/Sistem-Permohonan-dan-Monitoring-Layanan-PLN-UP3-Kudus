@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'employee' => [
+            'driver' => 'session',
+            'provider' => 'employees',
+        ],
     ],
 
     /*
@@ -63,6 +67,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+
+        'employees' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Employee::class,
         ],
 
         // 'users' => [
@@ -96,6 +105,20 @@ return [
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
+        ],
+
+        'customers' => [
+            'provider' => 'users',
+            'table' => 'customer_password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 300,
+        ],
+
+        'employees' => [
+            'provider' => 'employees',
+            'table' => 'employee_password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 300,
         ],
     ],
 

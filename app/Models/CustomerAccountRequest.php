@@ -11,6 +11,13 @@ class CustomerAccountRequest extends Model
 
     protected $fillable = [
         'full_name',
+        'nik',
+        'nomor_npwp',
+        'slo_reg',
+        'slo_cert',
+        'no_kk',
+        'id_pelanggan',
+        'nomor_meter',
         'email',
         'phone',
         'gender',
@@ -34,5 +41,10 @@ class CustomerAccountRequest extends Model
     public function reviewer()
     {
         return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    public function activationTokens()
+    {
+        return $this->hasMany(ActivationToken::class, 'customer_account_request_id');
     }
 }

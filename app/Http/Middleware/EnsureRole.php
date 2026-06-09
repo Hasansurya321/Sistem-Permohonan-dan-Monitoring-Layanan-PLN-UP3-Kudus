@@ -29,15 +29,21 @@ class EnsureRole
             }
         }
 
+        // Check guards
+        $user = null;
+        if (Auth::guard('employee')->check()) {
+            $user = Auth::guard('employee')->user();
+        } elseif (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+        }
+
         // Guest -> redirect ke login sesuai konteks
-        if (!Auth::check()) {
+        if (!$user) {
             if ($request->is('internal/*') || $request->is('pegawai/*')) {
                 return redirect()->route('pegawai.login');
             }
             return redirect()->route('pelanggan.login');
         }
-
-        $user = Auth::user();
 
         // Role match -> allow
         if (in_array($user->role, $allowedRoles, true)) {

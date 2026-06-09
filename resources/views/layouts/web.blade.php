@@ -13,7 +13,7 @@
 <body class="bg-gray-50 font-sans text-slate-800 antialiased">
     
     <!-- Fixed Header -->
-    <header class="fixed top-0 inset-x-0 h-20 bg-white border-b border-slate-100 z-50 flex items-center shadow-sm">
+    <header class="fixed top-0 inset-x-0 h-20 pln-navbar border-b border-slate-100 z-50 flex items-center shadow-sm">
         <div class="w-full px-4 md:px-6 flex items-center h-full">
              <div class="flex items-center gap-8 md:gap-10">
                 <a href="{{ route('landing') }}" class="flex items-center gap-3">
@@ -36,13 +36,13 @@
             
             <!-- User Section (Auth Aware) -->
             <div class="ml-auto flex items-center gap-3 relative">
-                @auth
+                @if(Auth::guard('web')->check())
                     <!-- Authenticated User Dropdown -->
                     <div id="userDropdownToggle" class="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors border border-transparent hover:border-slate-100">
-                        <span class="hidden sm:block text-sm font-semibold text-slate-700">{{ Auth::user()->name }}</span>
+                        <span class="hidden sm:block text-sm font-semibold text-slate-700">{{ Auth::guard('web')->user()->name }}</span>
                         <div class="w-9 h-9 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500 border border-slate-200 shadow-sm">
-                            @if(Auth::user()->profile_photo)
-                                <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" class="w-full h-full object-cover">
+                            @if(Auth::guard('web')->user()->profile_photo)
+                                <img src="{{ asset('storage/' . Auth::guard('web')->user()->profile_photo) }}" class="w-full h-full object-cover">
                             @else
                                 <i class="fas fa-user text-sm"></i>
                             @endif
@@ -52,17 +52,26 @@
                     <!-- Dropdown Menu -->
                     <div id="userDropdownMenu" class="hidden absolute top-full right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg p-1 z-50">
                          <a href="{{ route('pelanggan.profile') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg">Lihat Profil Saya</a>
-                         @if(Auth::user()->role === 'pelanggan')
-                             <form action="{{ route('pelanggan.logout') }}" method="POST" class="w-full">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium">Logout</button>
-                            </form>
-                         @else
-                             <form action="{{ route('pegawai.logout') }}" method="POST" class="w-full">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium">Logout</button>
-                            </form>
-                         @endif
+                         <form action="{{ route('pelanggan.logout') }}" method="POST" class="w-full">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium">Logout</button>
+                        </form>
+                    </div>
+                @elseif(Auth::guard('employee')->check())
+                    <!-- Authenticated Pegawai Dropdown -->
+                    <div id="userDropdownToggle" class="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors border border-transparent hover:border-slate-100">
+                        <span class="hidden sm:block text-sm font-semibold text-slate-700">{{ Auth::guard('employee')->user()->name }}</span>
+                        <div class="w-9 h-9 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500 border border-slate-200 shadow-sm">
+                            <i class="fas fa-user text-sm"></i>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+                    </div>
+                    <!-- Dropdown Menu -->
+                    <div id="userDropdownMenu" class="hidden absolute top-full right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg p-1 z-50">
+                         <form action="{{ route('pegawai.logout') }}" method="POST" class="w-full">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium">Logout</button>
+                        </form>
                     </div>
                 @else
                     <!-- Guest Dropdown -->
@@ -77,7 +86,7 @@
                         <a href="{{ route('pelanggan.login') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg">Login Pelanggan</a>
                         <a href="{{ route('pegawai.login') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg">Login Pegawai</a>
                     </div>
-                @endauth
+                @endif
             </div>
         </div>
     </header>
@@ -93,6 +102,8 @@
             @yield('content')
         </main>
     @endif
+
+    <x-footer />
 
     <!-- Use app.js for dropdown logic -->
 </body>

@@ -16,8 +16,18 @@ class RequireCustomerAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Check if authenticated as employee but not as customer
+        if (Auth::guard('employee')->check() && !Auth::guard('web')->check()) {
+            $employee = Auth::guard('employee')->user();
+            $roleConfig = config('internal_roles');
+            if (isset($roleConfig[$employee->role])) {
+                return redirect($roleConfig[$employee->role]['path'])
+                    ->with('error', 'Halaman ini khusus untuk pelanggan.');
+            }
+        }
+
         // Guest -> Handler Specific
-        if (!Auth::check()) {
+        if (!Auth::guard('web')->check()) {
             // Case 1: Tamu akses Monitoring/Pembayaran via URL
             if ($request->is('monitoring') || $request->is('pembayaran') || $request->is('monitoring/*')) {
                 return redirect()->route('landing')->with('need_login', true);
@@ -29,10 +39,11 @@ class RequireCustomerAuth
             ]);
         }
 
-        // Pegawai nyasar ke area pelanggan -> lempar ke panelnya
-        if (Auth::user()->role !== 'pelanggan') {
+        // Pegawai nyasar ke area pelanggan -> lempar ke panelnya (jika login via web dengan role pegawai)
+        $user = Auth::guard('web')->user();
+        if ($user && $user->role !== 'pelanggan') {
             $roleConfig = config('internal_roles');
-            $userRole = Auth::user()->role;
+            $userRole = $user->role;
 
             if (isset($roleConfig[$userRole])) {
                 return redirect($roleConfig[$userRole]['path'])

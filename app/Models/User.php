@@ -26,12 +26,32 @@ class User extends Authenticatable
         'phone',
         'gender',
         'address_text',
+        'address',
+        'status',
+        'approved_by',
+        'approved_at',
+        'activated_at',
         'nik',
+        'nomor_npwp',
+        'slo_reg',
+        'slo_cert',
+        'no_kk',
+        'id_pelanggan',
+        'nomor_meter',
     ];
 
     public function pelangganProfile()
     {
         return $this->hasOne(PelangganProfile::class);
+    }
+
+    /**
+     * ONE SOURCE OF TRUTH — Relasi ke data bisnis pelanggan.
+     * master_pelanggan adalah sumber data utama untuk semua informasi pelanggan.
+     */
+    public function masterPelanggan()
+    {
+        return $this->hasOne(MasterPelanggan::class, 'user_id');
     }
 
     public function applicantIdentity()

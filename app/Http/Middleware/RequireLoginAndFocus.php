@@ -16,7 +16,7 @@ class RequireLoginAndFocus
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        if (!Auth::guard('web')->check()) {
             return redirect()->route('landing', [
                 'need_login' => 1,
                 'focus' => 'login',

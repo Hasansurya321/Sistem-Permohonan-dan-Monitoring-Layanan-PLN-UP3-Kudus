@@ -14,7 +14,7 @@ class Authenticate extends Middleware
     {
         if (!$request->expectsJson()) {
             // Check if the request is for internal panel routes
-            if ($request->is('internal/*') || $request->is('internal')) {
+            if ($request->is('internal/*') || $request->is('internal') || $request->is('admin/*') || $request->is('admin')) {
                 return route('pegawai.login');
             }
             

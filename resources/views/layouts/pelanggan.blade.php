@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PLN UP3 Kudus - Layanan Pelanggan</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +15,7 @@
 <body class="bg-gray-50 font-sans text-slate-800 antialiased">
     
     <!-- Fixed Header -->
-    <header class="fixed top-0 inset-x-0 h-20 bg-white border-b border-slate-100 z-50 flex items-center shadow-sm">
+    <header class="fixed top-0 inset-x-0 h-20 pln-navbar border-b border-slate-100 z-50 flex items-center shadow-sm">
         <div class="w-full px-4 md:px-6 flex items-center h-full">
              <div class="flex items-center gap-8 md:gap-10">
                 <a href="{{ route('landing') }}" class="flex items-center gap-3">
@@ -37,13 +38,13 @@
             
             <!-- User Section (Auth Aware) -->
             <div class="ml-auto flex items-center gap-3 relative">
-                @auth
+                @auth('web')
                     <!-- Authenticated User Dropdown -->
                     <div id="userDropdownToggle" class="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors border border-transparent hover:border-slate-100">
-                        <span class="hidden sm:block text-sm font-semibold text-slate-700">{{ Auth::user()->name }}</span>
+                        <span class="hidden sm:block text-sm font-semibold text-slate-700">{{ Auth::guard('web')->user()->name }}</span>
                         <div class="w-9 h-9 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500 border border-slate-200 shadow-sm">
-                            @if(Auth::user()->profile_photo)
-                                <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" class="w-full h-full object-cover">
+                            @if(Auth::guard('web')->user()->profile_photo)
+                                <img src="{{ asset('storage/' . Auth::guard('web')->user()->profile_photo) }}" class="w-full h-full object-cover">
                             @else
                                 <i class="fas fa-user text-sm"></i>
                             @endif
@@ -80,6 +81,9 @@
     <main class="pt-24 pb-12 px-4 md:px-6 max-w-[1200px] mx-auto min-h-screen">
         @yield('content')
     </main>
+
+    @livewireScripts
+    <x-footer />
 
 </body>
 </html>

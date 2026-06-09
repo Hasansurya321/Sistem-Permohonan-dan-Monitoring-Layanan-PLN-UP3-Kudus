@@ -9,7 +9,7 @@ class PelangganProfileController extends Controller
 {
     public function show()
     {
-        $user = Auth::user();
+        $user = Auth::guard('web')->user();
 
         $profile = PelangganProfile::firstOrCreate(
             ['user_id' => $user->id],

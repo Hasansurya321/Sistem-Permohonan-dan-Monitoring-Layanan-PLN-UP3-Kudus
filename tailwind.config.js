@@ -4,6 +4,7 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        "./vendor/filament/**/*.blade.php",
     ],
     theme: {
         extend: {
@@ -11,6 +12,8 @@ export default {
                 plnBlue: "#2F5AA8",
                 plnOrange: "#D08A3C",
                 ink: "#1F2A44",
+                "pln-dark": "#093c5d",
+                "pln-yellow": "#f7c600",
             },
             fontFamily: {
                 sans: ["Inter", "sans-serif"],

@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLN UP3 Kudus - Footer Component Preview</title>
+    
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Modern dashboard styling for previewer */
+        :root {
+            --bg-canvas: #0B0F19;
+            --bg-card: #151D30;
+            --border-color: #24314F;
+            --text-title: #FFFFFF;
+            --text-body: #94A3B8;
+            --accent-primary: #38BDF8;
+            --accent-success: #10B981;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* HEADER BANNER */
+        .preview-header {
+            background: linear-gradient(180deg, rgba(21, 29, 48, 0.8) 0%, rgba(11, 15, 25, 0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 30px 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .preview-header h1 {
+            color: var(--text-title);
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .preview-header h1 i {
+            color: #FFF100;
+            filter: drop-shadow(0 0 8px rgba(255, 241, 0, 0.4));
+        }
+
+        .preview-header p {
+            font-size: 1rem;
+            color: var(--text-body);
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            line-height: 1.5;
+        }
+
+        /* CONTROLS TOOLBAR */
+        .controls-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+
+        .btn-control {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-title);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-control:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
+        }
+
+        .btn-control.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-canvas);
+        }
+
+        /* LIVE PREVIEW CONTAINER */
+        .preview-stage {
+            flex: 1;
+            padding: 60px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .preview-viewport {
+            width: 100%;
+            max-width: 1280px;
+            border-radius: 0px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border-color);
+            transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #062337;
+        }
+
+        /* CODE EXPLORER */
+        .code-explorer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 24px;
+        }
+
+        .code-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .code-title {
+            color: var(--text-title);
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-canvas);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-body);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .code-tab.active {
+            background: var(--bg-card);
+            color: var(--accent-primary);
+        }
+
+        .code-wrapper {
+            position: relative;
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .btn-copy {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-title);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .btn-copy:hover {
+            background: var(--accent-primary);
+            color: var(--bg-canvas);
+            border-color: var(--accent-primary);
+        }
+
+        pre {
+            margin: 0;
+            padding: 24px;
+            overflow-x: auto;
+            max-height: 500px;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #E2E8F0;
+        }
+
+        .code-block {
+            display: none;
+        }
+
+        .code-block.active {
+            display: block;
+        }
+
+        /* ---------------------------------------------------- */
+        /* EMBEDDED FOOTER COMPONENT STYLE (VANILLA CSS)       */
+        /* ---------------------------------------------------- */
+        
+        .pln-footer-wrapper {
+            --pln-primary-bg: #093C5D;
+            --pln-secondary-bg: #0B4F7A;
+            --pln-accent-cyan: #00A3E0;
+            --pln-accent-yellow: #FFF100;
+            --pln-accent-green: #10B981;
+            --pln-text-main: #FFFFFF;
+            --pln-text-muted: #B8C9D6;
+            --pln-text-muted-hover: #FFFFFF;
+            --pln-font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --pln-transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            font-family: var(--pln-font-family);
+            background: linear-gradient(135deg, var(--pln-primary-bg) 0%, var(--pln-secondary-bg) 100%);
+            color: var(--pln-text-main);
+            padding: 70px 0 35px 0;
+            border-radius: 0; /* Sharp corners */
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 -15px 35px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        /* Grid Background Pattern */
+        .pln-footer-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Gradient Glow Blob */
+        .pln-footer-wrapper::after {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(0, 163, 224, 0.15) 0%, transparent 70%);
+            top: -125px;
+            right: -50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .pln-footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+
+        .pln-footer-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 0.8fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .pln-footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box;
+        }
+
+        /* BRAND SECTION */
+        .pln-footer-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .pln-footer-logo-img {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+            transition: var(--pln-transition-smooth);
+        }
+
+        .pln-footer-logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        .pln-footer-brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .pln-footer-brand-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--pln-text-main);
+            letter-spacing: 0.5px;
+        }
+
+        .pln-footer-brand-subtitle {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--pln-accent-cyan);
+            letter-spacing: 1.5px;
+        }
+
+        .pln-footer-brand-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--pln-text-muted);
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .pln-footer-socials {
+            display: flex;
+            gap: 12px;
+        }
+
+        .pln-footer-social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--pln-text-main);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--pln-transition-smooth);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .pln-footer-social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: var(--pln-accent-cyan);
+            border-color: var(--pln-accent-cyan);
+            box-shadow: 0 8px 20px rgba(0, 163, 224, 0.35);
+        }
+
+        .pln-footer-social-svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: var(--pln-transition-smooth);
+        }
+
+        /* SECTION TITLES */
+        .pln-footer-col-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--pln-text-main);
+            margin: 0;
+            position: relative;
+            padding-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .pln-footer-col-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 36px;
+            height: 3px;
+            background: var(--pln-accent-cyan);
+            border-radius: 2px;
+        }
+
+        /* INFO SECTION */
+        .pln-footer-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pln-footer-info-list li {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .pln-footer-info-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            color: var(--pln-accent-cyan);
+            font-size: 1rem;
+            margin-top: 2px;
+        }
+
+        .pln-footer-info-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--pln-text-muted);
+        }
+
+        .pln-footer-info-text a {
+            color: var(--pln-text-muted);
+            text-decoration: none;
+            transition: var(--pln-transition-smooth);
+        }
+
+        .pln-footer-info-text a:hover {
+            color: var(--pln-accent-cyan);
+        }
+
+        /* QUICK NAVIGATION */
+        .pln-footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pln-footer-link {
+            display: inline-block;
+            color: var(--pln-text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            position: relative;
+            padding: 2px 0;
+            transition: var(--pln-transition-smooth);
+        }
+
+        .pln-footer-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--pln-accent-cyan);
+            transform: scaleX(0);
+            transform-origin: bottom left;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pln-footer-link:hover {
+            color: var(--pln-text-main);
+            transform: translateX(4px);
+        }
+
+        .pln-footer-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* OPERATIONAL HOURS & GOOGLE MAPS BUTTON */
+        .pln-footer-hours {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pln-footer-hours-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 3px solid rgba(255, 255, 255, 0.1);
+            transition: var(--pln-transition-smooth);
+        }
+
+        .pln-footer-hours-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--pln-accent-cyan);
+        }
+
+        .pln-footer-hours-day {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--pln-accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .pln-footer-hours-time {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--pln-text-main);
+        }
+
+        .pln-status-closed {
+            color: #EF4444 !important;
+            font-weight: 700 !important;
+        }
+
+        .pln-footer-maps-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--pln-text-main);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--pln-transition-smooth);
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .pln-footer-maps-btn:hover {
+            background: var(--pln-accent-cyan);
+            border-color: var(--pln-accent-cyan);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 163, 224, 0.25);
+        }
+
+        .pln-footer-maps-btn i {
+            font-size: 1.1rem;
+            color: var(--pln-accent-cyan);
+            transition: var(--pln-transition-smooth);
+        }
+
+        .pln-footer-maps-btn:hover i {
+            color: #ffffff;
+        }
+
+        /* SEPARATOR & COPYRIGHT */
+        .pln-footer-separator {
+            height: 1px;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 20%,
+                rgba(255, 255, 255, 0.1) 80%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            border: none;
+            margin: 45px 0 25px 0;
+        }
+
+        .pln-footer-bottom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pln-footer-copyright {
+            font-size: 0.85rem;
+            color: var(--pln-text-muted);
+            margin: 0;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        /* GRID RESPONSIVE HOOKS */
+        @media (max-width: 1023px) {
+            .pln-footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+            .pln-footer-wrapper {
+                padding: 60px 0 30px 0;
+                border-radius: 0;
+            }
+        }
+
+        @media (max-width: 639px) {
+            .pln-footer-grid {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+            .pln-footer-wrapper {
+                padding: 50px 0 30px 0;
+                border-radius: 0;
+            }
+            .pln-footer-col {
+                gap: 15px;
+            }
+            .pln-footer-separator {
+                margin: 35px 0 25px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER BANNER -->
+    <header class="preview-header">
+        <h1><i class="fas fa-bolt"></i> PLN UP3 Kudus - Footer Component</h1>
+        <p>Preview rancangan footer website bergaya modern corporate untuk sistem layanan digital. Responsive secara otomatis menggunakan CSS Grid & Flexbox murni.</p>
+        
+        <div class="controls-toolbar">
+            <button class="btn-control active" onclick="setResolution(1280, this)"><i class="fas fa-desktop"></i> Desktop (1280px)</button>
+            <button class="btn-control" onclick="setResolution(768, this)"><i class="fas fa-tablet-alt"></i> Tablet (768px)</button>
+            <button class="btn-control" onclick="setResolution(375, this)"><i class="fas fa-mobile-alt"></i> Mobile (375px)</button>
+        </div>
+    </header>
+
+    <!-- LIVE PREVIEW STAGE -->
+    <section class="preview-stage">
+        <div class="preview-viewport" id="viewport">
+            
+            <!-- START OF FOOTER -->
+            <footer class="pln-footer-wrapper">
+                <div class="pln-footer-container">
+                    <div class="pln-footer-grid">
+                        
+                        <!-- COLUMN 1: BRAND / COMPANY -->
+                        <div class="pln-footer-col">
+                            <div class="pln-footer-logo-container">
+                                <!-- PNG Logo -->
+                                <img src="images/pln-logo2.png" alt="PLN Logo" class="pln-footer-logo-img">
+                                <div class="pln-footer-brand-text">
+                                    <span class="pln-footer-brand-title">PLN</span>
+                                    <span class="pln-footer-brand-subtitle">UP3 KUDUS</span>
+                                </div>
+                            </div>
+                            <p class="pln-footer-brand-desc">
+                                PLN UP3 Kudus berkomitmen memberikan layanan kelistrikan terbaik berbasis teknologi digital untuk kemudahan masyarakat.
+                            </p>
+                            <div class="pln-footer-socials">
+                                <a href="https://www.instagram.com/info.plnkudus/" target="_blank" rel="noopener noreferrer" class="pln-footer-social-icon" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="https://x.com/plnareakudus" target="_blank" rel="noopener noreferrer" class="pln-footer-social-icon" aria-label="X (Twitter)">
+                                    <svg class="pln-footer-social-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- COLUMN 2: OFFICE INFO -->
+                        <div class="pln-footer-col">
+                            <h4 class="pln-footer-col-title">Informasi Kantor</h4>
+                            <ul class="pln-footer-info-list">
+                                <li>
+                                    <div class="pln-footer-info-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <span class="pln-footer-info-text">
+                                        Jl. R. Agil Kusumadya No.102, Jati Wetan, Kec. Jati, Kabupaten Kudus, Jawa Tengah 59346
+                                    </span>
+                                </li>
+                                <li>
+                                    <div class="pln-footer-info-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <span class="pln-footer-info-text">
+                                        <a href="tel:0291431982">0291431982</a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- COLUMN 3: QUICK NAVIGATION -->
+                        <div class="pln-footer-col">
+                            <h4 class="pln-footer-col-title">Layanan</h4>
+                            <ul class="pln-footer-links-list">
+                                <li><a href="#" class="pln-footer-link">Dashboard</a></li>
+                                <li><a href="#" class="pln-footer-link">Monitoring</a></li>
+                                <li><a href="#" class="pln-footer-link">Pembayaran</a></li>
+                                <li><a href="#" class="pln-footer-link">Bantuan</a></li>
+                            </ul>
+                        </div>
+                        
+                        <!-- COLUMN 4: OPERATIONAL HOURS -->
+                        <div class="pln-footer-col">
+                            <h4 class="pln-footer-col-title">Jam Layanan</h4>
+                            <div class="pln-footer-hours">
+                                <div class="pln-footer-hours-row">
+                                    <span class="pln-footer-hours-day">Senin - Jumat</span>
+                                    <span class="pln-footer-hours-time">07.30 – 16.00 WIB</span>
+                                </div>
+                                <div class="pln-footer-hours-row">
+                                    <span class="pln-footer-hours-day">Sabtu - Minggu</span>
+                                    <span class="pln-footer-hours-time pln-status-closed">Tutup</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Google Maps Direction Button -->
+                            <a href="https://maps.app.goo.gl/SHZ6d5xuvjBfumgT6" target="_blank" rel="noopener noreferrer" class="pln-footer-maps-btn">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span>Petunjuk Lokasi Kantor</span>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- BOTTOM SEPARATOR -->
+                    <hr class="pln-footer-separator">
+                    
+                    <!-- COPYRIGHT -->
+                    <div class="pln-footer-bottom">
+                        <p class="pln-footer-copyright">
+                            &copy; 2024 PT PLN (Persero) UP3 Kudus. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+            <!-- END OF FOOTER -->
+            
+        </div>
+    </section>
+
+    <!-- CODE EXPLORER -->
+    <section class="code-explorer">
+        <div class="code-container">
+            <div class="code-header">
+                <div class="code-title"><i class="fas fa-code"></i> Source Code Component</div>
+                <div class="code-tabs">
+                    <button class="code-tab active" onclick="switchTab('html', this)">HTML</button>
+                    <button class="code-tab" onclick="switchTab('css', this)">CSS</button>
+                </div>
+            </div>
+            
+            <div class="code-wrapper">
+                <button class="btn-copy" onclick="copyActiveCode()"><i class="far fa-copy"></i> Salin Kode</button>
+                
+                <!-- HTML Code Block -->
+                <div class="code-block active" id="html-code-block">
+                    <pre><code id="html-code"></code></pre>
+                </div>
+                
+                <!-- CSS Code Block -->
+                <div class="code-block" id="css-code-block">
+                    <pre><code id="css-code"></code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Set resolution of the viewport
+        function setResolution(width, button) {
+            const viewport = document.getElementById('viewport');
+            viewport.style.maxWidth = width === 1280 ? '1280px' : width + 'px';
+            
+            // Manage active button class
+            const buttons = document.querySelectorAll('.btn-control');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        }
+
+        // Switch Code Tabs
+        let activeTab = 'html';
+        function switchTab(tabName, button) {
+            activeTab = tabName;
+            
+            // Manage active tab class
+            const tabs = document.querySelectorAll('.code-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Show code block
+            const blocks = document.querySelectorAll('.code-block');
+            blocks.forEach(block => block.classList.remove('active'));
+            document.getElementById(tabName + '-code-block').classList.add('active');
+        }
+
+        // Copy active code to clipboard
+        function copyActiveCode() {
+            const codeText = document.getElementById(activeTab + '-raw-code').textContent;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.querySelector('.btn-copy');
+                btn.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
+                btn.style.background = 'var(--accent-success)';
+                btn.style.color = '#fff';
+                btn.style.borderColor = 'var(--accent-success)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="far fa-copy"></i> Salin Kode';
+                    btn.style.background = 'rgba(255, 255, 255, 0.05)';
+                    btn.style.color = 'var(--text-title)';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
+
+        // Populate Source Codes dynamically to prevent escape character issues and for copy helper
+        const htmlSource = `<footer class="pln-footer-wrapper">
+    <div class="pln-footer-container">
+        <div class="pln-footer-grid">
+            
+            <!-- KOLOM 1: BRAND / COMPANY -->
+            <div class="pln-footer-col">
+                <div class="pln-footer-logo-container">
+                    <!-- PNG Logo -->
+                    <img src="images/pln-logo2.png" alt="PLN Logo" class="pln-footer-logo-img">
+                    <div class="pln-footer-brand-text">
+                        <span class="pln-footer-brand-title">PLN</span>
+                        <span class="pln-footer-brand-subtitle">UP3 KUDUS</span>
+                    </div>
+                </div>
+                <p class="pln-footer-brand-desc">
+                    PLN UP3 Kudus berkomitmen memberikan layanan kelistrikan terbaik berbasis teknologi digital untuk kemudahan masyarakat.
+                </p>
+                <div class="pln-footer-socials">
+                    <a href="https://www.instagram.com/info.plnkudus/" target="_blank" rel="noopener noreferrer" class="pln-footer-social-icon" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://x.com/plnareakudus" target="_blank" rel="noopener noreferrer" class="pln-footer-social-icon" aria-label="X (Twitter)">
+                        <svg class="pln-footer-social-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- KOLOM 2: INFORMASI KANTOR -->
+            <div class="pln-footer-col">
+                <h4 class="pln-footer-col-title">Informasi Kantor</h4>
+                <ul class="pln-footer-info-list">
+                    <li>
+                        <div class="pln-footer-info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <span class="pln-footer-info-text">
+                            Jl. R. Agil Kusumadya No.102, Jati Wetan, Kec. Jati, Kabupaten Kudus, Jawa Tengah 59346
+                        </span>
+                    </li>
+                    <li>
+                        <div class="pln-footer-info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span class="pln-footer-info-text">
+                            <a href="tel:0291431982">0291431982</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- KOLOM 3: QUICK NAVIGATION -->
+            <div class="pln-footer-col">
+                <h4 class="pln-footer-col-title">Layanan</h4>
+                <ul class="pln-footer-links-list">
+                    <li><a href="#" class="pln-footer-link">Dashboard</a></li>
+                    <li><a href="#" class="pln-footer-link">Monitoring</a></li>
+                    <li><a href="#" class="pln-footer-link">Pembayaran</a></li>
+                    <li><a href="#" class="pln-footer-link">Bantuan</a></li>
+                </ul>
+            </div>
+            
+            <!-- KOLOM 4: JAM OPERASIONAL -->
+            <div class="pln-footer-col">
+                <h4 class="pln-footer-col-title">Jam Layanan</h4>
+                <div class="pln-footer-hours">
+                    <div class="pln-footer-hours-row">
+                        <span class="pln-footer-hours-day">Senin - Jumat</span>
+                        <span class="pln-footer-hours-time">07.30 – 16.00 WIB</span>
+                    </div>
+                    <div class="pln-footer-hours-row">
+                        <span class="pln-footer-hours-day">Sabtu - Minggu</span>
+                        <span class="pln-footer-hours-time pln-status-closed">Tutup</span>
+                    </div>
+                </div>
+                
+                <!-- Google Maps Direction Button -->
+                <a href="https://maps.app.goo.gl/SHZ6d5xuvjBfumgT6" target="_blank" rel="noopener noreferrer" class="pln-footer-maps-btn">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Petunjuk Lokasi Kantor</span>
+                </a>
+            </div>
+            
+        </div>
+        
+        <!-- SEPARATOR LINE -->
+        <hr class="pln-footer-separator">
+        
+        <!-- COPYRIGHT -->
+        <div class="pln-footer-bottom">
+            <p class="pln-footer-copyright">
+                &copy; 2024 PT PLN (Persero) UP3 Kudus. All rights reserved.
+            </p>
+        </div>
+    </div>
+</footer>`;
+
+        const cssSource = `/* ==========================================================================
+   PLN UP3 KUDUS - CORPORATE FOOTER STYLE (REVISED)
+   ========================================================================== */
+
+/* Font Import (Jika belum di-import di project) */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+.pln-footer-wrapper {
+    /* Color System & Config Variables */
+    --pln-primary-bg: #093C5D;
+    --pln-secondary-bg: #0B4F7A;
+    --pln-accent-cyan: #00A3E0;
+    --pln-accent-yellow: #FFF100;
+    --pln-accent-green: #10B981;
+    --pln-text-main: #FFFFFF;
+    --pln-text-muted: #B8C9D6;
+    --pln-text-muted-hover: #FFFFFF;
+    --pln-font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --pln-transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    font-family: var(--pln-font-family);
+    background: linear-gradient(135deg, var(--pln-primary-bg) 0%, var(--pln-secondary-bg) 100%);
+    color: var(--pln-text-main);
+    padding: 70px 0 35px 0;
+    border-radius: 0; /* Sharp corners */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -15px 35px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Subtle decorative dots background grid */
+.pln-footer-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Radial light glow */
+.pln-footer-wrapper::after {
+    content: '';
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(0, 163, 224, 0.15) 0%, transparent 70%);
+    top: -125px;
+    right: -50px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.pln-footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.pln-footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 0.8fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.pln-footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+/* 1. BRAND SECTION STYLING */
+.pln-footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pln-footer-logo-img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-logo-img:hover {
+    transform: scale(1.05);
+}
+
+.pln-footer-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.pln-footer-brand-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--pln-text-main);
+    letter-spacing: 0.5px;
+}
+
+.pln-footer-brand-subtitle {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--pln-accent-cyan);
+    letter-spacing: 1.5px;
+}
+
+.pln-footer-brand-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--pln-text-muted);
+    margin: 0;
+    font-weight: 400;
+}
+
+.pln-footer-socials {
+    display: flex;
+    gap: 12px;
+}
+
+.pln-footer-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--pln-text-main);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--pln-transition-smooth);
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.pln-footer-social-icon:hover {
+    transform: translateY(-5px) scale(1.1);
+    background: var(--pln-accent-cyan);
+    border-color: var(--pln-accent-cyan);
+    box-shadow: 0 8px 20px rgba(0, 163, 224, 0.35);
+}
+
+.pln-footer-social-svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    transition: var(--pln-transition-smooth);
+}
+
+/* SECTION HEADINGS */
+.pln-footer-col-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--pln-text-main);
+    margin: 0;
+    position: relative;
+    padding-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+.pln-footer-col-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 36px;
+    height: 3px;
+    background: var(--pln-accent-cyan);
+    border-radius: 2px;
+}
+
+/* 2. OFFICE INFO STYLING */
+.pln-footer-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pln-footer-info-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.pln-footer-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--pln-accent-cyan);
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+.pln-footer-info-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--pln-text-muted);
+}
+
+.pln-footer-info-text a {
+    color: var(--pln-text-muted);
+    text-decoration: none;
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-info-text a:hover {
+    color: var(--pln-accent-cyan);
+}
+
+/* 3. QUICK NAVIGATION (LINKS) STYLING */
+.pln-footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pln-footer-link {
+    display: inline-block;
+    color: var(--pln-text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    position: relative;
+    padding: 2px 0;
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--pln-accent-cyan);
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pln-footer-link:hover {
+    color: var(--pln-text-main);
+    transform: translateX(4px);
+}
+
+.pln-footer-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* 4. OPERATIONAL HOURS STYLING */
+.pln-footer-hours {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pln-footer-hours-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border-left: 3px solid rgba(255, 255, 255, 0.1);
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-hours-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: var(--pln-accent-cyan);
+}
+
+.pln-footer-hours-day {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--pln-accent-cyan);
+    letter-spacing: 0.5px;
+}
+
+.pln-footer-hours-time {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--pln-text-main);
+}
+
+.pln-status-closed {
+    color: #EF4444 !important;
+    font-weight: 700 !important;
+}
+
+/* GOOGLE MAPS BUTTON STYLING */
+.pln-footer-maps-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--pln-text-main);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--pln-transition-smooth);
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.pln-footer-maps-btn:hover {
+    background: var(--pln-accent-cyan);
+    border-color: var(--pln-accent-cyan);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 163, 224, 0.25);
+}
+
+.pln-footer-maps-btn i {
+    font-size: 1.1rem;
+    color: var(--pln-accent-cyan);
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-maps-btn:hover i {
+    color: #ffffff;
+}
+
+/* SEPARATOR LINE */
+.pln-footer-separator {
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 20%,
+        rgba(255, 255, 255, 0.1) 80%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    border: none;
+    margin: 45px 0 25px 0;
+}
+
+.pln-footer-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pln-footer-copyright {
+    font-size: 0.85rem;
+    color: var(--pln-text-muted);
+    margin: 0;
+    text-align: center;
+    font-weight: 400;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet (2 Kolom) */
+@media (max-width: 1023px) {
+    .pln-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    
+    .pln-footer-wrapper {
+        padding: 60px 0 30px 0;
+        border-radius: 0;
+    }
+}
+
+/* Mobile (1 Kolom Stack) */
+@media (max-width: 639px) {
+    .pln-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+    
+    .pln-footer-wrapper {
+        padding: 50px 0 30px 0;
+        border-radius: 0;
+    }
+    
+    .pln-footer-col {
+        gap: 15px;
+    }
+    
+    .pln-footer-separator {
+        margin: 35px 0 25px 0;
+    }
+}`;
+
+        // Escape HTML for displaying
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Initialize Codes
+        document.getElementById('html-code').innerHTML = escapeHtml(htmlSource);
+        document.getElementById('css-code').innerHTML = escapeHtml(cssSource);
+
+        // Add hidden textareas for copy support
+        const htmlRaw = document.createElement('textarea');
+        htmlRaw.id = 'html-raw-code';
+        htmlRaw.style.display = 'none';
+        htmlRaw.value = htmlSource;
+        document.body.appendChild(htmlRaw);
+
+        const cssRaw = document.createElement('textarea');
+        cssRaw.id = 'css-raw-code';
+        cssRaw.style.display = 'none';
+        cssRaw.value = cssSource;
+        document.body.appendChild(cssRaw);
+    </script>
+</body>
+</html>

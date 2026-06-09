@@ -51,13 +51,13 @@
                             <input type="text" id="no_kk" name="no_kk" value="{{ old('no_kk') }}" maxlength="16" 
                                    inputmode="numeric"
                                    class="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition" 
-                                   placeholder="16 Digit Angka (Harus sama dengan NIK)">
+                                    placeholder="16 Digit Angka Nomor Kartu Keluarga">
                             <button type="button" id="btn-verify-kk" 
                                     class="px-6 py-3 bg-[#2F5AA8] text-white rounded-xl font-bold hover:bg-[#274C8E] transition shadow-lg">
                                 Verifikasi
                             </button>
                         </div>
-                        <p class="text-xs text-slate-500 mt-1">* No KK harus sama dengan NIK pemohon (16 digit)</p>
+                                <p class="text-xs text-slate-500 mt-1">* Masukkan 16 digit Nomor Kartu Keluarga Anda</p>
                         <div id="kk-status" class="hidden mt-2 p-3 rounded-lg text-sm"></div>
                         @error('no_kk') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Verify KK - Must equal NIK
+// Verify KK - Validasi format 16 digit
 async function verifyKK() {
     const input = document.getElementById('no_kk').value.trim();
     const statusDiv = document.getElementById('kk-status');

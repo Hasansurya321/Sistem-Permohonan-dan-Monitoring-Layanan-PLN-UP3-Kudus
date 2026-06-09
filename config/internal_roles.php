@@ -11,13 +11,6 @@ return [
     |
     */
 
-    'admin_pelayanan' => [
-        'domain' => 'adminlayanan.com',
-        'panel' => 'admin-pelayanan',
-        'path' => '/internal/admin-pelayanan',
-        'label' => 'Admin Pelayanan',
-    ],
-
     'unit_survey' => [
         'domain' => 'unitsurvey.com',
         'panel' => 'unit-survey',
@@ -51,5 +44,19 @@ return [
         'panel' => 'supervisor',
         'path' => '/internal/supervisor',
         'label' => 'Supervisor',
+    ],
+
+    'admin_layanan' => [
+        'domain' => 'adminlayanan.com',
+        'panel' => 'admin-layanan',
+        'path' => '/internal/admin-layanan',
+        'label' => 'Admin Layanan',
+    ],
+
+    'admin_pelayanan' => [
+        'domain' => 'adminpelayanan.com',
+        'panel' => 'admin-layanan',
+        'path' => '/internal/admin-layanan',
+        'label' => 'Admin Layanan',
     ],
 ];

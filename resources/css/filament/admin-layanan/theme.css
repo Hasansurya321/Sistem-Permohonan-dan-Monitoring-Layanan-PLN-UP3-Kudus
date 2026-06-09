@@ -1,0 +1,938 @@
+/* ============================================
+   FILAMENT THEME — PLN UP3 KUDUS
+   Admin Layanan Dashboard
+   ============================================ */
+
+/* ─── ROOT VARIABLES ─── */
+:root {
+    --pln-blue: #093c5d;
+    --pln-blue-hover: #1e4d7a;
+    --pln-yellow: #f7c600;
+    --pln-white: #ffffff;
+    --pln-gray: #f3f4f6;
+    --pln-gray-border: #e5e7eb;
+    --sidebar-width: 16rem;
+}
+
+/* ─── TOP NAVBAR / HEADER ─── */
+.fi-topbar {
+    background: #093c5d !important;
+    background-color: #093c5d !important;
+    background-image: none !important;
+    border-bottom: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    height: 50px !important;
+}
+
+.fi-topbar > nav {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    height: 100%;
+    padding-left: 1rem !important;
+}
+
+.fi-topbar .fi-global-search {
+    color: var(--pln-white) !important;
+}
+
+.fi-topbar .fi-global-search input {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: var(--pln-white) !important;
+}
+
+.fi-topbar .fi-global-search input::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.fi-topbar .fi-global-search button svg {
+    color: var(--pln-white) !important;
+}
+
+/* Sidebar toggle button in topbar */
+.fi-topbar .fi-sidebar-open-btn svg {
+    color: var(--pln-white) !important;
+}
+
+/* User dropdown menu in topbar */
+.fi-topbar .fi-user-menu .fi-btn {
+    color: var(--pln-white) !important;
+}
+
+.fi-topbar .fi-user-menu .fi-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Notification bell & icons */
+.fi-topbar .fi-icon-btn svg {
+    color: var(--pln-white) !important;
+}
+
+/* ─── SIDEBAR ─── */
+.fi-sidebar {
+    background-color: var(--pln-blue) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    overflow-y: auto;
+}
+
+/* Sidebar header - hidden since branding is at SIDEBAR_NAV_START */
+.fi-sidebar-header {
+    display: none !important;
+}
+
+/* Sidebar nav start - container for custom branding */
+.fi-sidebar-nav > :first-child {
+    padding: 1rem 1.25rem 0.5rem 1.25rem;
+}
+
+/* ─── SIDEBAR NAVIGATION ITEMS ─── */
+.fi-sidebar-nav {
+    padding: 0.75rem 0 !important;
+}
+
+.fi-sidebar-item {
+    margin: 0.125rem 0.5rem !important;
+    border-radius: 0.5rem !important;
+    transition: all 0.15s ease !important;
+}
+
+.fi-sidebar-item a,
+.fi-sidebar-item button {
+    padding: 0.625rem 0.75rem !important;
+    color: #ffffff !important;
+    border-radius: 0.5rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 450 !important;
+    transition: all 0.15s ease !important;
+    gap: 0.75rem !important;
+}
+
+.fi-sidebar-item a svg,
+.fi-sidebar-item button svg {
+    color: #ffffff !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+}
+
+.fi-sidebar-item a:hover,
+.fi-sidebar-item button:hover {
+    background-color: var(--pln-blue-hover) !important;
+    color: var(--pln-white) !important;
+}
+
+.fi-sidebar-item a:hover svg,
+.fi-sidebar-item button:hover svg {
+    color: var(--pln-white) !important;
+}
+
+/* Active sidebar item */
+.fi-sidebar-item-active a,
+.fi-sidebar-item-active button {
+    background-color: var(--pln-blue-hover) !important;
+    color: var(--pln-white) !important;
+    font-weight: 500 !important;
+}
+
+.fi-sidebar-item-active a svg,
+.fi-sidebar-item-active button svg {
+    color: var(--pln-white) !important;
+}
+
+.fi-sidebar-item-active a::before,
+.fi-sidebar-item-active button::before {
+    display: none !important;
+}
+
+/* Sidebar item label */
+.fi-sidebar-item-label {
+    font-size: 0.875rem !important;
+    color: #ffffff !important;
+}
+
+/* Sidebar section groups */
+.fi-sidebar-group {
+    padding: 0.25rem 0 !important;
+}
+
+/* Sidebar group labels - hidden since we use flat navigation */
+.fi-sidebar-group-label {
+    display: none !important;
+}
+
+/* Scrollbar styling */
+.fi-sidebar::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+.fi-sidebar::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.fi-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-radius: 2px !important;
+}
+
+.fi-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ─── MAIN CONTENT AREA ─── */
+.fi-main {
+    background-color: #f0f2f5 !important;
+}
+
+.fi-content {
+    padding: 1.5rem !important;
+}
+
+/* ─── DASHBOARD CARDS WIDGETS ─── */
+.fi-widget {
+    border-radius: 0.75rem !important;
+    border: 1px solid var(--pln-gray-border) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+    background-color: var(--pln-white) !important;
+    transition: box-shadow 0.2s ease !important;
+}
+
+.fi-widget:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ─── TABLES ─── */
+.fi-ta-ctn {
+    border-radius: 0.75rem !important;
+    border: 1px solid var(--pln-gray-border) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+.fi-ta-ctn th {
+    background-color: #f8fafc !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    color: #475569 !important;
+}
+
+/* ─── FORMS ─── */
+.fi-fo-field {
+    margin-bottom: 1.25rem !important;
+}
+
+.fi-fo-field label {
+    font-weight: 500 !important;
+    color: #374151 !important;
+}
+
+.fi-fo-field input,
+.fi-fo-field select,
+.fi-fo-field textarea {
+    border-radius: 0.5rem !important;
+    border-color: #d1d5db !important;
+    transition: all 0.15s ease !important;
+}
+
+.fi-fo-field input:focus,
+.fi-fo-field select:focus,
+.fi-fo-field textarea:focus {
+    border-color: var(--pln-blue) !important;
+    box-shadow: 0 0 0 3px rgba(9, 60, 93, 0.1) !important;
+}
+
+/* ─── BUTTONS ─── */
+.fi-btn {
+    border-radius: 0.5rem !important;
+    font-weight: 500 !important;
+    transition: all 0.15s ease !important;
+}
+
+.fi-btn-primary {
+    background-color: var(--pln-blue) !important;
+    border-color: var(--pln-blue) !important;
+}
+
+.fi-btn-primary:hover {
+    background-color: var(--pln-blue-hover) !important;
+}
+
+/* ─── PAGE HEADER ─── */
+.fi-page-header-heading {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+}
+
+.fi-page-header-subheading {
+    color: #64748b !important;
+    font-size: 0.9rem !important;
+}
+
+/* ─── BREADCRUMBS ─── */
+.fi-breadcrumbs {
+    font-size: 0.8rem !important;
+}
+
+.fi-breadcrumbs a {
+    color: var(--pln-blue) !important;
+}
+
+/* ─── HERO SECTION ─── */
+.fi-hero-section {
+    background-color: transparent;
+
+    height: 100px;
+    width: auto;
+    margin-left: -2rem;
+    margin-right: -2rem;
+
+    display: flex;
+    align-items: flex-start;
+    padding-top: 0;
+}
+
+.fi-hero-inner {
+    width: 100%;
+    padding-left: 1rem;
+}
+
+.fi-hero-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fi-hero-welcome {
+    font-size: 33px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.35),
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 30px rgba(255, 255, 255, 0.4),
+        0 0 60px rgba(255, 255, 255, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.fi-hero-title {
+    font-size: 33px;
+    font-weight: 800;
+    color: #ffd447;
+    line-height: 1;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.35),
+        0 0 8px rgba(255, 212, 71, 0.6),
+        0 0 25px rgba(255, 212, 71, 0.3),
+        0 0 50px rgba(255, 212, 71, 0.12),
+        0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.fi-hero-search {
+    margin-top: 4px;
+}
+
+.fi-hero-search-input {
+    width: 470px !important;
+    height: 42px !important;
+    padding: 0 20px !important;
+    background: #093c5d !important;
+    background-color: #093c5d !important;
+    border: none !important;
+    outline: none !important;
+    border-radius: 20px !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+.fi-hero-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.85) !important;
+    opacity: 1 !important;
+}
+
+/* ─── KPI OVERVIEW CARDS ─── */
+.fi-wi-stats-overview {
+    margin-top: 24px !important;
+}
+
+.fi-wi-stats-overview-stat {
+    background: linear-gradient(
+        135deg,
+        #072f49 0%,
+        #093c5d 45%,
+        #0b4a70 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 10px 14px !important;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-height: 80px !important;
+}
+
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+}
+
+.fi-wi-stats-overview-stat-icon {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(6px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #ffffff !important;
+}
+
+.fi-wi-stats-overview-stat-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    color: #ffffff !important;
+}
+
+.fi-wi-stats-overview-stat-label {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    margin-bottom: 2px !important;
+}
+
+.fi-wi-stats-overview-stat-value {
+    font-size: 28px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    line-height: 1 !important;
+    letter-spacing: -0.02em !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.fi-wi-stats-overview-stat-description {
+    display: none !important;
+}
+
+.fi-wi-stats-overview-stat-chart {
+    display: none !important;
+}
+
+/* ─── CHART ANALYTICS CARDS ─── */
+.fi-chart-card {
+    background: linear-gradient(135deg, #072f49 0%, #093c5d 45%, #0b4a70 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    transition: all 0.25s ease;
+}
+
+.fi-chart-card:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+.fi-chart-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.fi-chart-card-icon {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fi-chart-card-icon svg {
+    width: 28px;
+    height: 28px;
+    color: #ffffff;
+}
+
+.fi-chart-card-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.fi-chart-split {
+    display: flex;
+    gap: 16px;
+}
+
+.fi-chart-half {
+    flex: 1;
+    min-width: 0;
+}
+
+.fi-chart-half-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.fi-chart-divider {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.fi-chart-container {
+    width: 100%;
+    min-height: 220px;
+}
+
+.fi-chart-card-wide {
+    grid-column: span 2;
+}
+
+.fi-chart-full {
+    width: 100%;
+}
+
+.fi-chart-container-wide {
+    width: 100%;
+    min-height: 240px;
+}
+
+/* ─── HYBRID KPI WIDGET (Radial + Progress List) ─── */
+.fi-hybrid-body {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.fi-hybrid-radial {
+    flex: 0 0 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 8px;
+}
+
+.fi-hybrid-list {
+    flex: 1;
+    min-width: 0;
+}
+
+.fi-hybrid-group {
+    margin-bottom: 16px;
+}
+
+.fi-hybrid-group:last-child {
+    margin-bottom: 0;
+}
+
+.fi-hybrid-group-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+}
+
+.fi-progress-item {
+    margin-bottom: 10px;
+}
+
+.fi-progress-item:last-child {
+    margin-bottom: 0;
+}
+
+.fi-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.78);
+    margin-bottom: 4px;
+}
+
+.fi-progress-value {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.fi-progress-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.fi-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease;
+}
+
+/* ─── TOPBAR TEXT (kiri) ─── */
+.fi-topbar-text {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin-left: 0 !important;
+    height: 100%;
+}
+
+.fi-topbar-welcome {
+    color: #ffffff;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fi-topbar-title {
+    color: #f7c600;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ─── CUSTOM HEADER BRAND ─── */
+.fi-admin-layanan-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.25rem 0;
+}
+
+.fi-admin-layanan-brand img {
+    height: 36px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.fi-admin-layanan-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.fi-admin-layanan-brand-pln {
+    color: var(--pln-white);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.fi-admin-layanan-brand-up3 {
+    color: var(--pln-yellow);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* ─── SIDEBAR BRAND ─── */
+.fi-sidebar-brand-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.fi-sidebar-brand-content img {
+    height: 32px;
+    width: auto;
+}
+
+.fi-sidebar-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.fi-sidebar-brand-pln {
+    color: var(--pln-white);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.fi-sidebar-brand-up3 {
+    color: var(--pln-yellow);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* ─── AKUN PELANGGAN KPI CARDS (COMPACT) ─── */
+.akun-kpi-grid {
+    margin-top: 8px;
+}
+
+.akun-kpi-row-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.akun-kpi-row-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.akun-kpi-card-compact {
+    background: #093c5d !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 10px 14px !important;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-height: 85px !important;
+    box-sizing: border-box !important;
+}
+
+.akun-kpi-card-compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Icon Box (compact, follows KPI Dashboard) */
+.akun-kpi-icon-box {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(6px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--icon-color, #14b8d4) !important;
+}
+
+.akun-kpi-icon-box svg {
+    width: 18px !important;
+    height: 18px !important;
+    color: var(--icon-color, #14b8d4) !important;
+}
+
+/* Vertical Divider (compact) */
+.akun-kpi-divider-compact {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+/* Info Container (compact) */
+.akun-kpi-info-compact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.akun-kpi-label-compact {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    margin-bottom: 2px !important;
+    line-height: 1.2 !important;
+}
+
+.akun-kpi-value-compact {
+    font-size: 28px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    line-height: 1 !important;
+    letter-spacing: -0.02em !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    margin-bottom: 1px !important;
+}
+
+.akun-kpi-subtitle-compact {
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    line-height: 1.2 !important;
+}
+
+/* ─── TAMBAH DAYA — SEGMENTED NAVIGATION TABS ─── */
+.tambah-daya-container {
+    margin-top: 8px;
+    width: 100%;
+}
+
+.td-status-tabs {
+    display: grid;
+    width: 100%;
+    background: #093c5d;
+    border-radius: 12px;
+    padding: 8px;
+    gap: 4px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.td-tab {
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    font-family: inherit;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.td-tab:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.td-tab-active {
+    background: #1fa8c9 !important;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.td-table-container {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--pln-gray-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    width: 100%;
+}
+
+/* ─── KPI CARD LINK — Clickable Card ─── */
+.akun-kpi-card-link {
+    text-decoration: none;
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.akun-kpi-card-link:hover {
+    transform: translateY(-2px);
+}
+
+.akun-kpi-card-link:focus-visible {
+    outline: 2px solid #1fa8c9;
+    outline-offset: 2px;
+    border-radius: 18px;
+}
+
+/* ─── LOADING STATES ─── */
+.td-tab:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.td-tab-loading {
+    font-size: 13px;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.td-table-container {
+    position: relative;
+}
+
+.td-table-loading {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.td-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 12px;
+}
+
+.td-loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #093c5d;
+    border-radius: 50%;
+    animation: td-spin 0.7s linear infinite;
+}
+
+@keyframes td-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+    .fi-topbar {
+        height: 56px !important;
+    }
+
+    .fi-admin-layanan-brand img {
+        height: 28px;
+    }
+
+    .fi-admin-layanan-brand-pln {
+        font-size: 0.85rem;
+    }
+
+    .fi-admin-layanan-brand-up3 {
+        font-size: 0.65rem;
+    }
+
+    .fi-content {
+        padding: 1rem !important;
+    }
+}

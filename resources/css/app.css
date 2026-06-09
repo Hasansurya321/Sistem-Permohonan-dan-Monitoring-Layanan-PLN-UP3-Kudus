@@ -1,12 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @keyframes shakeX {
-    0%,100% { transform: translateX(0); }
-    20% { transform: translateX(-8px); }
-    40% { transform: translateX(8px); }
-    60% { transform: translateX(-6px); }
-    80% { transform: translateX(6px); }
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    20% {
+        transform: translateX(-8px);
+    }
+    40% {
+        transform: translateX(8px);
+    }
+    60% {
+        transform: translateX(-6px);
+    }
+    80% {
+        transform: translateX(6px);
+    }
 }
 
 .shake-x {
@@ -14,7 +26,7 @@
 }
 
 .login-focus-ring {
-    box-shadow: 0 0 0 4px rgba(59,130,246,.18);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
     border-radius: 16px;
     transition: box-shadow 0.3s ease;
 }
@@ -40,4 +52,1080 @@
 }
 .dark .fi-pagination-overview {
     color: #e5e7eb !important;
+}
+
+/* ==========================================================================
+   PLN UP3 KUDUS - CORPORATE FOOTER STYLES (REVISED)
+   ========================================================================== */
+
+.pln-footer-wrapper {
+    /* Color System & Config Variables */
+    --pln-primary-bg: #093c5d;
+    --pln-secondary-bg: #0b4f7a;
+    --pln-accent-cyan: #00a3e0;
+    --pln-accent-yellow: #fff100;
+    --pln-accent-green: #10b981;
+    --pln-text-main: #ffffff;
+    --pln-text-muted: #b8c9d6;
+    --pln-text-muted-hover: #ffffff;
+    --pln-font-family:
+        "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    --pln-transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    font-family: var(--pln-font-family);
+    background: linear-gradient(
+        135deg,
+        var(--pln-primary-bg) 0%,
+        var(--pln-secondary-bg) 100%
+    );
+    color: var(--pln-text-main);
+    padding: 70px 0 35px 0;
+    border-radius: 0; /* Fully rectangular corners */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -15px 35px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Subtle decorative dots background grid */
+.pln-footer-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.04) 1px,
+        transparent 1px
+    );
+    background-size: 24px 24px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Radial light glow */
+.pln-footer-wrapper::after {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(
+        circle,
+        rgba(0, 163, 224, 0.15) 0%,
+        transparent 70%
+    );
+    top: -125px;
+    right: -50px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.pln-footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.pln-footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 0.8fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.pln-footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+/* 1. BRAND SECTION STYLING */
+.pln-footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pln-footer-logo-img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-logo-img:hover {
+    transform: scale(1.05);
+}
+
+.pln-footer-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.pln-footer-brand-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--pln-text-main);
+    letter-spacing: 0.5px;
+}
+
+.pln-footer-brand-subtitle {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--pln-accent-yellow);
+    letter-spacing: 1.5px;
+}
+
+.pln-footer-brand-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--pln-text-muted);
+    margin: 0;
+    font-weight: 400;
+}
+
+.pln-footer-socials {
+    display: flex;
+    gap: 12px;
+}
+
+.pln-footer-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--pln-text-main);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--pln-transition-smooth);
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.pln-footer-social-icon:hover {
+    transform: translateY(-5px) scale(1.1);
+    background: var(--pln-accent-cyan);
+    border-color: var(--pln-accent-cyan);
+    box-shadow: 0 8px 20px rgba(0, 163, 224, 0.35);
+}
+
+.pln-footer-social-svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    transition: var(--pln-transition-smooth);
+}
+
+/* SECTION HEADINGS */
+.pln-footer-col-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--pln-text-main);
+    margin: 0;
+    position: relative;
+    padding-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+.pln-footer-col-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 36px;
+    height: 3px;
+    background: var(--pln-accent-cyan);
+    border-radius: 2px;
+}
+
+/* 2. OFFICE INFO STYLING */
+.pln-footer-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pln-footer-info-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.pln-footer-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--pln-accent-cyan);
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+.pln-footer-info-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--pln-text-muted);
+}
+
+.pln-footer-info-text a {
+    color: var(--pln-text-muted);
+    text-decoration: none;
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-info-text a:hover {
+    color: var(--pln-accent-cyan);
+}
+
+/* 3. QUICK NAVIGATION (LINKS) STYLING */
+.pln-footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pln-footer-link {
+    display: inline-block;
+    color: var(--pln-text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    position: relative;
+    padding: 2px 0;
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-link::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--pln-accent-cyan);
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pln-footer-link:hover {
+    color: var(--pln-text-main);
+    transform: translateX(4px);
+}
+
+.pln-footer-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* 4. OPERATIONAL HOURS STYLING */
+.pln-footer-hours {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pln-footer-hours-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border-left: 3px solid rgba(255, 255, 255, 0.1);
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-hours-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: var(--pln-accent-cyan);
+}
+
+.pln-footer-hours-day {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--pln-accent-cyan);
+    letter-spacing: 0.5px;
+}
+
+.pln-footer-hours-time {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--pln-text-main);
+}
+
+.pln-status-closed {
+    color: #ef4444 !important;
+    font-weight: 700 !important;
+}
+
+/* GOOGLE MAPS BUTTON STYLING */
+.pln-footer-maps-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--pln-text-main);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--pln-transition-smooth);
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.pln-footer-maps-btn:hover {
+    background: var(--pln-accent-cyan);
+    border-color: var(--pln-accent-cyan);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 163, 224, 0.25);
+}
+
+.pln-footer-maps-btn i {
+    font-size: 1.1rem;
+    color: var(--pln-accent-cyan);
+    transition: var(--pln-transition-smooth);
+}
+
+.pln-footer-maps-btn:hover i {
+    color: #ffffff;
+}
+
+/* SEPARATOR LINE */
+.pln-footer-separator {
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 20%,
+        rgba(255, 255, 255, 0.1) 80%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    border: none;
+    margin: 45px 0 25px 0;
+}
+
+.pln-footer-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pln-footer-copyright {
+    font-size: 0.85rem;
+    color: var(--pln-text-muted);
+    margin: 0;
+    text-align: center;
+    font-weight: 400;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet (2 Kolom) */
+@media (max-width: 1023px) {
+    .pln-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .pln-footer-wrapper {
+        padding: 60px 0 30px 0;
+        border-radius: 0;
+    }
+}
+
+/* Mobile (1 Kolom Stack) */
+@media (max-width: 639px) {
+    .pln-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .pln-footer-wrapper {
+        padding: 50px 0 30px 0;
+        border-radius: 0; /* No curved border-radius on mobile */
+    }
+
+    .pln-footer-col {
+        gap: 15px;
+    }
+
+    .pln-footer-separator {
+        margin: 35px 0 25px 0;
+    }
+}
+
+/* ==========================================================================
+   PLN UP3 KUDUS - CORPORATE NAVBAR CUSTOM STYLING
+   ========================================================================== */
+
+.pln-navbar {
+    background-color: #093c5d !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    transition: var(--pln-transition-smooth, all 0.3s ease);
+}
+
+/* Brand Text Override */
+.pln-navbar .tracking-tight {
+    color: #ffffff !important;
+}
+
+.pln-navbar .text-yellow-600 {
+    color: #fff100 !important;
+}
+
+/* Nav Menu Links (Unactive) */
+.pln-navbar nav a.text-slate-600 {
+    color: rgba(255, 255, 255, 0.75) !important;
+    transition: all 0.25s ease;
+}
+
+.pln-navbar nav a.text-slate-600:hover {
+    color: #ffffff !important;
+}
+
+/* Nav Menu Link (Active) */
+.pln-navbar nav a.font-semibold {
+    color: #ffffff !important;
+    border-color: #00a3e0 !important;
+}
+
+/* User profile text and elements */
+.pln-navbar #userDropdownToggle,
+.pln-navbar #guestDropdownToggle {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+.pln-navbar #userDropdownToggle:hover,
+.pln-navbar #guestDropdownToggle:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.pln-navbar #userDropdownToggle .text-slate-700 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.pln-navbar #userDropdownToggle .text-slate-400,
+.pln-navbar #userDropdownToggle .fa-chevron-down,
+.pln-navbar #guestDropdownToggle .fa-chevron-down {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.pln-navbar #guestDropdownToggle .bg-slate-100 {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+.pln-navbar #guestDropdownToggle .text-slate-500 {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Profile Photo Circle Border Adjustments on Dark BG */
+.pln-navbar #userDropdownToggle .rounded-full.bg-slate-200 {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   PLN UP3 KUDUS - PREMIUM SPLIT-SCREEN AUTHENTICATION DESIGN
+   ========================================================================== */
+
+/* Fullscreen Immersive Background */
+.auth-page-bg {
+    background-color: #ffffff;
+    background-image: none; /* Pure solid white, no images/gradients */
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Immersive Card Container */
+.auth-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 30px 60px -15px rgba(9, 60, 93, 0.08),
+        0 10px 30px -10px rgba(9, 60, 93, 0.04);
+    transition: all 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Absolute Moving Overlay Panel */
+.auth-overlay-panel {
+    background: linear-gradient(135deg, #093c5d 0%, #05263c 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    z-index: 20;
+    overflow: hidden;
+    transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Position States for Overlay Panel */
+.auth-state-login .auth-overlay-panel {
+    transform: translateX(100%);
+}
+
+.auth-state-register .auth-overlay-panel {
+    transform: translateX(0);
+}
+
+/* Overlay Dot Grid Background */
+.auth-overlay-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px
+    );
+    background-size: 24px 24px;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Soft glowing decorative spots inside panel */
+.auth-glow-circle-1 {
+    position: absolute;
+    top: -25%;
+    left: -25%;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(0, 163, 224, 0.12) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+.auth-glow-circle-2 {
+    position: absolute;
+    bottom: -25%;
+    right: -25%;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 241, 0, 0.04) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Overlay Content Cross-Fade & Slide */
+.auth-overlay-content {
+    transition:
+        opacity 0.6s cubic-bezier(0.76, 0, 0.24, 1),
+        transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.auth-state-login #overlayContentLogin {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+.auth-state-login #overlayContentRegister {
+    opacity: 0;
+    transform: translateX(-40px);
+    pointer-events: none;
+}
+
+.auth-state-register #overlayContentLogin {
+    opacity: 0;
+    transform: translateX(40px);
+    pointer-events: none;
+}
+.auth-state-register #overlayContentRegister {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/* Forms Cross-Fade & Parallax Slide */
+.auth-form-side {
+    width: 50%;
+    height: 100%;
+    transition:
+        opacity 0.65s cubic-bezier(0.76, 0, 0.24, 1),
+        transform 0.65s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.auth-state-login .auth-login-form-side {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+.auth-state-login .auth-register-form-side {
+    opacity: 0;
+    transform: translateX(40px);
+    pointer-events: none;
+}
+
+.auth-state-register .auth-login-form-side {
+    opacity: 0;
+    transform: translateX(-40px);
+    pointer-events: none;
+}
+.auth-state-register .auth-register-form-side {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/* Compact Forms Styling */
+.auth-input-group {
+    position: relative;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: #1e293b;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+
+.auth-input:focus {
+    background-color: #ffffff;
+    border-color: #093c5d;
+    box-shadow: 0 0 0 4px rgba(9, 60, 93, 0.06);
+}
+
+.auth-input-has-icon {
+    padding-left: 38px;
+}
+
+.auth-input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.8rem;
+    transition: color 0.2s ease;
+}
+
+.auth-input:focus + .auth-input-icon {
+    color: #093c5d;
+}
+
+.auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #093c5d;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(9, 60, 93, 0.12);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-btn:hover {
+    background-color: #0b4f7a;
+    box-shadow: 0 6px 15px rgba(9, 60, 93, 0.2);
+    transform: translateY(-1px);
+}
+
+.auth-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 6px rgba(9, 60, 93, 0.12);
+}
+
+/* Hide scrollbar completely but allow scrolling if needed */
+.auth-form-scroll {
+    max-height: 80%;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    padding-right: 2px;
+}
+.auth-form-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
+}
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE OVERRIDES
+   ========================================================================== */
+@media (max-width: 767px) {
+    .auth-page-bg {
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-y: auto !important;
+        padding: 0 !important;
+    }
+
+    .auth-card {
+        width: 100vw !important;
+        max-width: none !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: 100vh !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        flex-direction: column !important;
+    }
+
+    .auth-form-side {
+        width: 100% !important;
+        height: auto !important;
+        padding: 32px 24px !important;
+        transition: none !important;
+        transform: none !important;
+    }
+
+    .auth-overlay-panel {
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        transform: none !important;
+        padding: 48px 24px !important;
+        order: -1 !important; /* Always put branding at the top */
+    }
+
+    .auth-overlay-content {
+        position: relative !important;
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
+    }
+
+    /* Show/Hide panels cleanly based on states on mobile */
+    .auth-state-login .auth-register-form-side {
+        display: none !important;
+    }
+    .auth-state-login .auth-login-form-side {
+        display: flex !important;
+    }
+    .auth-state-login #overlayContentRegister {
+        display: none !important;
+    }
+    .auth-state-login #overlayContentLogin {
+        display: flex !important;
+    }
+
+    .auth-state-register .auth-login-form-side {
+        display: none !important;
+    }
+    .auth-state-register .auth-register-form-side {
+        display: flex !important;
+    }
+    .auth-state-register #overlayContentLogin {
+        display: none !important;
+    }
+    .auth-state-register #overlayContentRegister {
+        display: flex !important;
+    }
+
+    .auth-form-scroll {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+}
+
+/* ==========================================================================
+   PEMBAYARAN — SEGMENTED NAVIGATION TABS (IDENTIK DENGAN TAMBAH DAYA)
+   ========================================================================== */
+
+.pembayaran-filter-container {
+    margin-top: 8px;
+    width: 100%;
+}
+
+.pembayaran-status-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    background: #093c5d;
+    border-radius: 12px;
+    padding: 8px;
+    gap: 4px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.pembayaran-tab {
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    font-family: inherit;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.pembayaran-tab:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.pembayaran-tab-active {
+    background: #1fa8c9 !important;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.pembayaran-tab:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pembayaran-tab-loading {
+    font-size: 13px;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.pembayaran-table-container {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+.pembayaran-table-loading {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.pembayaran-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 12px;
+}
+
+.pembayaran-loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #093c5d;
+    border-radius: 50%;
+    animation: pembayaran-spin 0.7s linear infinite;
+}
+
+@keyframes pembayaran-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Payment list items inside container */
+.pembayaran-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.pembayaran-item:last-child {
+    border-bottom: none;
+}
+
+.pembayaran-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pembayaran-item-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.pembayaran-item-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.pembayaran-item-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.pembayaran-badge-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.pembayaran-badge-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.pembayaran-badge-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.pembayaran-item-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-left: auto;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.pembayaran-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-family: inherit;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.pembayaran-btn-primary {
+    background: #1fa8c9;
+    color: #ffffff;
+}
+
+.pembayaran-btn-primary:hover {
+    background: #1589a8;
+}
+
+.pembayaran-btn-danger {
+    background: transparent;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.pembayaran-btn-danger:hover {
+    background: #fef2f2;
+}
+
+.pembayaran-btn-outline {
+    background: transparent;
+    color: #093c5d;
+    border: 1px solid #cddae8;
+}
+
+.pembayaran-btn-outline:hover {
+    background: #f1f5f9;
+    border-color: #93a3b8;
+}
+
+.pembayaran-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pembayaran-sisa-kesempatan {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.pembayaran-alert-success {
+    padding: 12px 16px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid #bbf7d0;
+}
+
+.pembayaran-alert-danger {
+    padding: 12px 16px;
+    background: #fee2e2;
+    color: #991b1b;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid #fecaca;
+}
+
+.pembayaran-empty {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.pembayaran-empty-text {
+    color: #94a3b8;
+    font-size: 14px;
 }

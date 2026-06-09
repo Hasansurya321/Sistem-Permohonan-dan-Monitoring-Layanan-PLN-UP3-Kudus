@@ -2,25 +2,28 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * DatabaseSeeder — Entry point untuk semua seeders.
+ *
+ * URUTAN WAJIB:
+ * 1. InternalUsersSeeder  — employee accounts (idempotent, JANGAN truncate)
+ * 2. FinalDemoSeeder      — pelanggan dummy + service_requests + payments + events
+ *
+ * Untuk demo environment:
+ *   php artisan db:seed --class=FinalDemoSeeder
+ *
+ * Untuk fresh setup lengkap (HATI-HATI: akan reset pelanggan & SR demo):
+ *   php artisan db:seed
+ */
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            InternalUsersSeeder::class,
+            FinalDemoSeeder::class,
         ]);
-
-        $this->call(DummyPelangganSeeder::class);
-        $this->call(DummyCustomerAccountRequestSeeder::class);
     }
 }

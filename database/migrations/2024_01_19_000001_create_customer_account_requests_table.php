@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('password_hash');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             
-            $table->foreignId('reviewed_by')->nullable()->constrained('users');
+            $table->foreignId('reviewed_by')->nullable()->constrained('employees');
             $table->timestamp('reviewed_at')->nullable();
             $table->text('rejection_reason')->nullable();
 

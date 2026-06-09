@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
@@ -25,7 +25,7 @@ class UnitPerencanaanPanelProvider extends PanelProvider
         return $panel
             ->id('unit-perencanaan')
             ->path('internal/unit-perencanaan')
-            ->authGuard('web')
+            ->authGuard('employee')
             ->colors([
                 'primary' => Color::Yellow,
             ])
@@ -42,7 +42,6 @@ class UnitPerencanaanPanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-                AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,

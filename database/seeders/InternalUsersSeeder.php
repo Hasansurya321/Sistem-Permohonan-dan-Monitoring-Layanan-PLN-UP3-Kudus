@@ -2,102 +2,100 @@
 
 namespace Database\Seeders;
 
+use App\Models\Employee;
 use Illuminate\Database\Seeder;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * InternalUsersSeeder — Safe idempotent seeder for internal employee accounts.
+ *
+ * ATURAN:
+ * - JANGAN truncate tabel employees.
+ * - JANGAN overwrite password jika employee sudah ada.
+ * - Gunakan firstOrCreate: skip jika sudah exist.
+ */
 class InternalUsersSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Clear existing internal users (optional - be careful in production!)
-        User::whereIn('role', [
-            'admin_pelayanan',
-            'unit_survey',
-            'unit_perencanaan',
-            'unit_konstruksi',
-            'unit_te',
-            'supervisor'
-        ])->delete();
-
-        // Create test users for each internal role
         $internalUsers = [
             [
-                'name' => 'Hasan',
-                'email' => 'hasan@supervisor.com',
-                'password' => Hash::make('Password123!'),
-                'role' => 'supervisor',
-                'is_active' => true,
-                'phone' => '081234567801',
-                'gender' => 'L',
-                'address_text' => 'Jl. Supervisor No. 1, Kudus',
+                'name'    => 'Hasan',
+                'email'   => 'hasan@supervisor.com',
+                'role'    => 'supervisor',
+                'unit'    => 'UP3 Kudus',
+                'jabatan' => 'Supervisor',
             ],
             [
-                'name' => 'Affan',
-                'email' => 'affan@adminlayanan.com',
-                'password' => Hash::make('Password123!'),
-                'role' => 'admin_pelayanan',
-                'is_active' => true,
-                'phone' => '081234567802',
-                'gender' => 'L',
-                'address_text' => 'Jl. Admin Pelayanan No. 2, Kudus',
+                'name'    => 'Affan',
+                'email'   => 'affan@adminlayanan.com',
+                'role'    => 'admin_pelayanan',
+                'unit'    => 'UP3 Kudus',
+                'jabatan' => 'Admin Pelayanan',
             ],
             [
-                'name' => 'Budi Surveyor',
-                'email' => 'budi@unitsurvey.com',
-                'password' => Hash::make('Password123!'),
-                'role' => 'unit_survey',
-                'is_active' => true,
-                'phone' => '081234567803',
-                'gender' => 'L',
-                'address_text' => 'Jl. Survey No. 3, Kudus',
+                'name'    => 'Budi Surveyor',
+                'email'   => 'budi@unitsurvey.com',
+                'role'    => 'unit_survey',
+                'unit'    => 'UP3 Kudus',
+                'jabatan' => 'Unit Survey',
             ],
             [
-                'name' => 'Citra Planner',
-                'email' => 'citra@unitperencanaan.com',
-                'password' => Hash::make('Password123!'),
-                'role' => 'unit_perencanaan',
-                'is_active' => true,
-                'phone' => '081234567804',
-                'gender' => 'P',
-                'address_text' => 'Jl. Perencanaan No. 4, Kudus',
+                'name'    => 'Citra Planner',
+                'email'   => 'citra@unitperencanaan.com',
+                'role'    => 'unit_perencanaan',
+                'unit'    => 'UP3 Kudus',
+                'jabatan' => 'Unit Perencanaan',
             ],
             [
-                'name' => 'Dedi Konstruktor',
-                'email' => 'dedi@unitkonstruksi.com',
-                'password' => Hash::make('Password123!'),
-                'role' => 'unit_konstruksi',
-                'is_active' => true,
-                'phone' => '081234567805',
-                'gender' => 'L',
-                'address_text' => 'Jl. Konstruksi No. 5, Kudus',
+                'name'    => 'Dedi Konstruktor',
+                'email'   => 'dedi@unitkonstruksi.com',
+                'role'    => 'unit_konstruksi',
+                'unit'    => 'UP3 Kudus',
+                'jabatan' => 'Unit Konstruksi',
             ],
             [
-                'name' => 'Eka Teknisi',
-                'email' => 'eka@unitte.com',
-                'password' => Hash::make('Password123!'),
-                'role' => 'unit_te',
-                'is_active' => true,
-                'phone' => '081234567806',
-                'gender' => 'P',
-                'address_text' => 'Jl. TE No. 6, Kudus',
+                'name'    => 'Eka Teknisi',
+                'email'   => 'eka@unitte.com',
+                'role'    => 'unit_te',
+                'unit'    => 'UP3 Kudus',
+                'jabatan' => 'Unit TE',
             ],
         ];
 
-        foreach ($internalUsers as $userData) {
-            User::create($userData);
+        $created = 0;
+        $skipped = 0;
+
+        foreach ($internalUsers as $data) {
+            $existing = Employee::where('email', $data['email'])->first();
+
+            if ($existing) {
+                // JANGAN overwrite password — hanya update non-sensitive fields
+                $existing->update([
+                    'name'    => $data['name'],
+                    'role'    => $data['role'],
+                    'unit'    => $data['unit'],
+                    'jabatan' => $data['jabatan'],
+                    'is_active' => true,
+                ]);
+                $this->command->line("  <comment>↩ Exists</comment> [{$data['email']}] — password unchanged.");
+                $skipped++;
+            } else {
+                Employee::create([
+                    'name'      => $data['name'],
+                    'email'     => $data['email'],
+                    'password'  => Hash::make('Password123!'),
+                    'role'      => $data['role'],
+                    'unit'      => $data['unit'],
+                    'jabatan'   => $data['jabatan'],
+                    'is_active' => true,
+                ]);
+                $this->command->line("  <info>✓ Created</info> [{$data['email']}]");
+                $created++;
+            }
         }
 
-        $this->command->info('✅ Created 6 internal staff users successfully!');
-        $this->command->info('📧 Login credentials:');
-        $this->command->info('   - hasan@supervisor.com / Password123!');
-        $this->command->info('   - affan@adminlayanan.com / Password123!');
-        $this->command->info('   - budi@unitsurvey.com / Password123!');
-        $this->command->info('   - citra@unitperencanaan.com / Password123!');
-        $this->command->info('   - dedi@unitkonstruksi.com / Password123!');
-        $this->command->info('   - eka@unitte.com / Password123!');
+        $this->command->newLine();
+        $this->command->info("✅ InternalUsersSeeder: {$created} created, {$skipped} skipped (existing).");
     }
 }

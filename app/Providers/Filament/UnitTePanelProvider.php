@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
@@ -25,7 +25,7 @@ class UnitTePanelProvider extends PanelProvider
         return $panel
             ->id('unit-te')
             ->path('internal/unit-te')
-            ->authGuard('web')
+            ->authGuard('employee')
             ->colors([
                 'primary' => Color::Purple,
             ])
@@ -42,7 +42,6 @@ class UnitTePanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-                AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,

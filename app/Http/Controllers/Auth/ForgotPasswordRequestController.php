@@ -145,7 +145,7 @@ class ForgotPasswordRequestController extends Controller
         if ($status == Password::RESET_LINK_SENT) {
             $request->update([
                 'status' => 'sent',
-                'processed_by' => Auth::id() ?? 1, // Fallback to 1 if no auth (e.g. testing)
+                'processed_by' => Auth::guard('employee')->id() ?? Auth::id() ?? 1, // Fallback to 1 if no auth (e.g. testing)
                 'processed_at' => now(),
             ]);
             return back()->with('success', 'Link reset password telah dikirim ke email pelanggan.');
@@ -165,7 +165,7 @@ class ForgotPasswordRequestController extends Controller
         $resetRequest->update([
             'status' => 'rejected',
             'admin_notes' => $request->input('notes', 'Rejected by admin'),
-            'processed_by' => Auth::id() ?? 1,
+            'processed_by' => Auth::guard('employee')->id() ?? Auth::id() ?? 1,
             'processed_at' => now(),
         ]);
         

@@ -15,7 +15,16 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (!auth()->check() || auth()->user()->role !== $role) {
+        if (\Illuminate\Support\Facades\Auth::guard('employee')->check() && !\Illuminate\Support\Facades\Auth::guard('web')->check()) {
+            $employee = \Illuminate\Support\Facades\Auth::guard('employee')->user();
+            $roleConfig = config('internal_roles');
+            if (isset($roleConfig[$employee->role])) {
+                return redirect($roleConfig[$employee->role]['path'])
+                    ->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+            }
+        }
+
+        if (!\Illuminate\Support\Facades\Auth::guard('web')->check() || \Illuminate\Support\Facades\Auth::guard('web')->user()->role !== $role) {
             abort(403, 'Unauthorized action.');
         }
 

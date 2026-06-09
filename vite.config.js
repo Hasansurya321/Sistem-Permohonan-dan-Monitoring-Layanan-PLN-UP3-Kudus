@@ -6,8 +6,8 @@ export default defineConfig({
         laravel({
             input: [
                 "resources/css/app.css",
+                "resources/css/filament/admin-layanan/theme.css",
                 "resources/js/app.js",
-                "resources/css/filament/admin-pelayanan/theme.css"
             ],
             refresh: true,
         }),
